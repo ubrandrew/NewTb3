@@ -30,13 +30,61 @@ cwd = os.getcwd()
 # with open(cwd+'/Data/accountsJson.txt', 'w+') as outfile:
 #     json.dump(accountsJson, outfile)
 
-categories = ['entertainment', 'transportation', 'food', 'health', 'shopping', 'gas', 'housing']
+categories = ['entertainment', 'transportation', 'food', 'health', 'shopping']
 
 merchantsJson = json.load(open(cwd+'/Data/merchantsJson.txt'))
 transfersJson = json.load((open(cwd+'/Data/transfersJson.txt')))
 #customersJson = json.load((open(cwd+'/Data/customersJson.txt')))
 accountsJson = json.load(open(cwd+'/Data/accountsJson.txt'))
 
+
+def graphByMerchant(customerID, merchantsJson, transfersJson):
+    idToName = {}
+    for merchant in merchantsJson['results']:
+        if 'name' in merchant:
+            idToName[merchant['_id']] = merchant['name'].title()
+        else:
+            idToName[merchant['_id']] = ['Unknown']
+    spending = {}
+    for transfer in transfersJson['results']:
+        if transfer['payer_id'] == customerID:
+            if idToName[transfer['payee_id']] not in spending:
+                spending[idToName[transfer['payee_id']]] = 0
+            spending[idToName[transfer['payee_id']]] += transfer['amount']
+    if spending:
+        x = list()
+        y = list()
+        for key in spending:
+            x.append(key)
+            y.append(spending[key])
+
+        trace = go.Bar(x=x, y=y)
+
+        data = [trace]
+        layout = go.Layout(
+            title='Categories of Largest Spending',
+            font=dict(family='Courier New, monospace', size=16, color='#1E8449'),
+            xaxis=dict(
+                title='Category',
+                titlefont=dict(
+                    family='Courier New, monospace',
+                    size=14,
+                    color='#7D3C98'
+                )
+            ),
+            yaxis=dict(
+                title='Spending (USD)',
+                titlefont=dict(
+                    family='Courier New, monospace',
+                    size=14,
+                    color='#7D3C98'
+                )
+            )
+        )
+        fig = go.Figure(data=data, layout=layout)
+
+        plotly.offline.plot(fig, filename=cwd + '/Graphs/Test.html')
+        return True
 
 
 
@@ -69,7 +117,7 @@ def graphByCategory(customerID, merchantsJson, transfersJson):
             y.append(spending[key])
 
         for i in range(len(x)):
-            x[i] = x[i].capitalize()
+            x[i] = x[i].title()
 
         trace = go.Bar(x = x, y=y)
 
@@ -98,9 +146,20 @@ def graphByCategory(customerID, merchantsJson, transfersJson):
 
         plotly.offline.plot(fig, filename=cwd+'/Graphs/Test.html')
         return True
+
+# cats = set()
+# for merchant in ((merchantsJson['results'])):
+#     if 'category' in merchant:
+#         if type(merchant['category']) == list:
+#             for c in merchant['category']:
+#                 cats.add(c)
+#         else:
+#             cats.add(merchant['category'])
+# print(cats)
+
 for i in range(len(accountsJson['results'])):
     x = int(random.random()*len(accountsJson['results']))
     print(x)
-    if graphByCategory(accountsJson['results'][x]['_id'], merchantsJson, transfersJson):
+    if graphByMerchant(accountsJson['results'][x]['_id'], merchantsJson, transfersJson):
         break
 #681 is solid
