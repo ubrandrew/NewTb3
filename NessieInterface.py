@@ -31,12 +31,20 @@ cwd = os.getcwd()
 # with open(cwd+'/Data/accountsJson.txt', 'w+') as outfile:
 #     json.dump(accountsJson, outfile)
 
+
+depositRequest = "http://api.reimaginebanking.com/enterprise/deposits?key=c49ecda776f1db2451f202eb71f21c1d"
+depositsJson = requests.get(depositRequest).json()
+
+with open(cwd+'/Data/depositsJson.txt', 'w+') as outfile:
+     json.dump(depositsJson, outfile)
+
 categories = ['entertainment', 'transportation', 'food', 'health', 'shopping']
 
 merchantsJson = json.load(open(cwd+'/Data/merchantsJson.txt'))
 transfersJson = json.load((open(cwd+'/Data/transfersJson.txt')))
 #customersJson = json.load((open(cwd+'/Data/customersJson.txt')))
 accountsJson = json.load(open(cwd+'/Data/accountsJson.txt'))
+depositsJson = json.load(open(cwd+ '/Data/depositsJson.txt'))
 
 
 backTranslations = {
@@ -177,6 +185,31 @@ def getPercentSaved(customerID, accountsJson, transfersJson):
     print("Balance ", balance)
     return 100-(spending/(balance+spending))*100
 
+
+def getCashBack(customerID, accountsJson, transfersJson, depositsJson):
+    #TODO Spending/revenue
+    spending = 0
+    balance = -1
+    revenue = 0
+    for transfer in transfersJson['results']:
+        if transfer['payer_id'] == customerID:
+            spending += transfer['amount']
+    for account in accountsJson['results']:
+        if account['_id'] == customerID:
+            balance = account['balance']
+    for deposits in depositsJson['results']:
+        if deposits['payee_id'] == customerID:
+            revenue += deposits['amount']
+    print("Revenue", revenue)
+    if balance == -1 or revenue == 0:
+        return 0
+    moneyBack = (.01+spending/revenue*.1) * balance
+
+    if moneyBack <= 0:
+        return 0
+    return moneyBack
+
+
 # cats = set()
 # for merchant in ((merchantsJson['results'])):
 #     if 'category' in merchant:
@@ -191,6 +224,7 @@ for i in range(len(accountsJson['results'])):
     x = int(random.random()*len(accountsJson['results']))
     print(x)
     print(getPercentSaved(accountsJson['results'][x]['_id'], accountsJson, transfersJson))
+    print("Cash back", getCashBack(accountsJson['results'][x]['_id'], accountsJson, transfersJson, depositsJson))
     if graphByMerchant(accountsJson['results'][x]['_id'], merchantsJson, transfersJson):
         break
 #681 is solid
