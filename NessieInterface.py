@@ -3,6 +3,7 @@ import json
 import os
 import plotly
 import plotly.graph_objs as go
+import random
 
 
 cwd = os.getcwd()
@@ -29,11 +30,11 @@ cwd = os.getcwd()
 # with open(cwd+'/Data/accountsJson.txt', 'w+') as outfile:
 #     json.dump(accountsJson, outfile)
 
-
+categories = ['entertainment', 'transportation', 'food', 'health', 'shopping', 'gas', 'housing']
 
 merchantsJson = json.load(open(cwd+'/Data/merchantsJson.txt'))
 transfersJson = json.load((open(cwd+'/Data/transfersJson.txt')))
-customersJson = json.load((open(cwd+'/Data/customersJson.txt')))
+#customersJson = json.load((open(cwd+'/Data/customersJson.txt')))
 accountsJson = json.load(open(cwd+'/Data/accountsJson.txt'))
 
 
@@ -48,33 +49,36 @@ def graphByCategory(customerID, merchantsJson, transfersJson):
             idToCategory[merchant['_id']] = ['Unknown']
     spending = {}
     for transfer in transfersJson['results']:
-        if 'transaction_date' in transfer:
-            if transfer['transaction_date'][0:7] == "2016-02":
-                for category in idToCategory[transfer['payee_id']]:
-                    if category not in spending:
-                        spending[category] = 0
-                    try:
-                        spending[category]+=float(transfer['amount'])
-                        print(float(transfer['amount']))
-                    except:
-                        spending[category] += 0
-    print(spending)
+        if transfer['payer_id'] == customerID:
+            if 'transaction_date' in transfer:
+                if 1:#transfer['transaction_date'][0:7] == "2016-02":
+                    for category in idToCategory[transfer['payee_id']]:
+                        if category not in spending:
+                            spending[category] = 0
+                        try:
+                            spending[category]+=float(transfer['amount'])
+                        except:
+                            spending[category] += 0
 
     if spending:
+        
         x = list()
         y = list()
         for key in spending:
             x.append(key)
             y.append(spending[key])
 
+        for i in range(len(x)):
+            x[i] = x[i].capitalize()
+
         trace = go.Bar(x = x, y=y)
 
         data = [trace]
         layout = go.Layout(
-            title='On-Scene Delay by Unit Type',
+            title='Categories of Largest Spending',
             font=dict(family='Courier New, monospace', size=16, color='#1E8449'),
             xaxis=dict(
-                title='Unit Type',
+                title='Category',
                 titlefont=dict(
                     family='Courier New, monospace',
                     size=14,
@@ -82,7 +86,7 @@ def graphByCategory(customerID, merchantsJson, transfersJson):
                 )
             ),
             yaxis=dict(
-                title='Average Delay to get On the Scene (seconds)',
+                title='Spending (USD)',
                 titlefont=dict(
                     family='Courier New, monospace',
                     size=14,
@@ -93,5 +97,10 @@ def graphByCategory(customerID, merchantsJson, transfersJson):
         fig = go.Figure(data=data, layout=layout)
 
         plotly.offline.plot(fig, filename=cwd+'/Graphs/Test.html')
-
-graphByCategory(accountsJson['results'][69]['_id'], merchantsJson, transfersJson)
+        return True
+for i in range(len(accountsJson['results'])):
+    x = int(random.random()*len(accountsJson['results']))
+    print(x)
+    if graphByCategory(accountsJson['results'][x]['_id'], merchantsJson, transfersJson):
+        break
+#681 is solid
