@@ -8,49 +8,59 @@ import plotly.graph_objs as go
 cwd = os.getcwd()
 #
 # merchantsRequest = "http://api.reimaginebanking.com/enterprise/merchants?key=c49ecda776f1db2451f202eb71f21c1d"
-# transfersRequest = "http://api.reimaginebanking.com/enterprise/transfers?key=c49ecda776f1db2451f202eb71f21c1d"
+# #transfersRequest = "http://api.reimaginebanking.com/enterprise/transfers?key=c49ecda776f1db2451f202eb71f21c1d"
+# customersRequest = "http://api.reimaginebanking.com/customers?key=c49ecda776f1db2451f202eb71f21c1d"
+# accountsRequest = "http://api.reimaginebanking.com/enterprise/accounts?key=c49ecda776f1db2451f202eb71f21c1d"
 #
 # merchantsJson = requests.get(merchantsRequest).json()
-# transfersJson = requests.get(transfersRequest).json()
+# #transfersJson = requests.get(transfersRequest).json()
+# customersJson = requests.get(customersRequest).json()
+# accountsJson = requests.get(accountsRequest).json()
 #
 # with open(cwd+'/Data/merchantsJson.txt', 'w+') as outfile:
 #     json.dump(merchantsJson, outfile)
 #
-# with open(cwd+'/Data/transfersJson.txt', 'w+') as outfile:
-#     json.dump(transfersJson, outfile)
+# #with open(cwd+'/Data/transfersJson.txt', 'w+') as outfile:
+# #    json.dump(transfersJson, outfile)
 #
+# with open(cwd+'/Data/customersJson.txt', 'w+') as outfile:
+#     json.dump(customersJson, outfile)
+#
+# with open(cwd+'/Data/accountsJson.txt', 'w+') as outfile:
+#     json.dump(accountsJson, outfile)
+
 
 
 merchantsJson = json.load(open(cwd+'/Data/merchantsJson.txt'))
 transfersJson = json.load((open(cwd+'/Data/transfersJson.txt')))
+customersJson = json.load((open(cwd+'/Data/customersJson.txt')))
+accountsJson = json.load(open(cwd+'/Data/accountsJson.txt'))
 
 
 
 
-def graphByCategory(customerID):
+def graphByCategory(customerID, merchantsJson, transfersJson):
     idToCategory = {}
-    for dict in merchantsJson['results']:
-        idToCategory[dict['_id']] = dict['category']
+    for merchant in merchantsJson['results']:
+        if 'category' in merchant:
+            idToCategory[merchant['_id']] = merchant['category']
+        else:
+            idToCategory[merchant['_id']] = ['Unknown']
     spending = {}
-    invalid = {}
     for transfer in transfersJson['results']:
-        if(transfer['payer_id']==customerID):
-            cont = False
-            for merchant in merchantsJson['results']:
-                if transfer['payee_id'] in invalid:
-                    break
-                if merchant['_id'] == transfer['payee_id']:
-                    cont = True
-                    break
-            if not cont:
-                invalid[transfer['payee_id']] = True
-            if cont:
-                print("SQUAD UP")
+        if 'transaction_date' in transfer:
+            if transfer['transaction_date'][0:7] == "2016-02":
                 for category in idToCategory[transfer['payee_id']]:
-                    spending[category]+=transfer['amount']
-    if spending:
-        print("SQUAD UP")
+                    if category not in spending:
+                        spending[category] = 0
+                    try:
+                        spending[category]+=float(transfer['amount'])
+                        print(float(transfer['amount']))
+                    except:
+                        spending[category] += 0
+    print(spending)
 
+    if spending:
         x = list()
         y = list()
         for key in spending:
@@ -84,5 +94,4 @@ def graphByCategory(customerID):
 
         plotly.offline.plot(fig, filename=cwd+'/Graphs/Test.html')
 
-for i,transfer in enumerate(transfersJson['results']):
-    graphByCategory(transfer['payer_id'])
+graphByCategory(accountsJson['results'][69]['_id'], merchantsJson, transfersJson)
