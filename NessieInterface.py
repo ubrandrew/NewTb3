@@ -7,6 +7,7 @@ import random
 
 
 cwd = os.getcwd()
+
 #
 # merchantsRequest = "http://api.reimaginebanking.com/enterprise/merchants?key=c49ecda776f1db2451f202eb71f21c1d"
 # #transfersRequest = "http://api.reimaginebanking.com/enterprise/transfers?key=c49ecda776f1db2451f202eb71f21c1d"
@@ -36,6 +37,19 @@ merchantsJson = json.load(open(cwd+'/Data/merchantsJson.txt'))
 transfersJson = json.load((open(cwd+'/Data/transfersJson.txt')))
 #customersJson = json.load((open(cwd+'/Data/customersJson.txt')))
 accountsJson = json.load(open(cwd+'/Data/accountsJson.txt'))
+
+
+backTranslations = {
+"entertainment" : ['Manicure', 'museum', 'investing', 'Hotel', 'Hair Salon', 'Goldfish', 'Cosmetics',  'drugs', 'car rental', 'enterntainment',  'Night Club', 'movie_theater', 'hair_care', 'Travel', 'porn'],
+"food" : ['Food/Drink', 'coffee', 'Groceries', 'Restaurant', 'fast food', 'American Restaurant', 'Pizza Restaurant', 'Food and Beverage', 'Salads'],
+"transportation" : ['gas', 'gas_station', 'Transport'],
+"health" : ['electronics', 'hospital', 'health'],
+"shopping" : ['Clothes', 'Shopping', 'post_office', 'Utility Stores', 'loan', 'supermarket', 'furniture_store', 'School Supplies', 'home_goods_store', 'shoe_store']
+}
+translations = {}
+for key, value in backTranslations.items():
+    for val in value:
+        translations[val] = key
 
 
 def graphByMerchant(customerID, merchantsJson, transfersJson):
@@ -88,7 +102,7 @@ def graphByMerchant(customerID, merchantsJson, transfersJson):
 
 
 
-def graphByCategory(customerID, merchantsJson, transfersJson):
+def graphByCategory(customerID, merchantsJson, transfersJson, translations):
     idToCategory = {}
     for merchant in merchantsJson['results']:
         if 'category' in merchant:
@@ -101,15 +115,15 @@ def graphByCategory(customerID, merchantsJson, transfersJson):
             if 'transaction_date' in transfer:
                 if 1:#transfer['transaction_date'][0:7] == "2016-02":
                     for category in idToCategory[transfer['payee_id']]:
-                        if category not in spending:
-                            spending[category] = 0
-                        try:
-                            spending[category]+=float(transfer['amount'])
-                        except:
-                            spending[category] += 0
+                        if category in translations:
+                            if category not in spending:
+                                spending[translations[category]] = 0
+                            try:
+                                spending[translations[category]]+=float(transfer['amount'])
+                            except:
+                                spending[translations[category]] += 0
 
     if spending:
-        
         x = list()
         y = list()
         for key in spending:
@@ -144,8 +158,24 @@ def graphByCategory(customerID, merchantsJson, transfersJson):
         )
         fig = go.Figure(data=data, layout=layout)
 
-        plotly.offline.plot(fig, filename=cwd+'/Graphs/Test.html')
+        plotly.offline.plot(fig, filename=cwd+'/Graphs/GeneralCategories.html')
         return True
+
+
+def getPercentSaved(customerID, accountsJson, transfersJson):
+    spending = 0
+    balance = -1
+    for transfer in transfersJson['results']:
+        if transfer['payer_id'] == customerID:
+            spending += transfer['amount']
+    print("Spending ", spending)
+    for account in accountsJson['results']:
+        if account['_id'] == customerID:
+            balance = account['balance']
+    if balance == -1 or balance == 0:
+        return 0
+    print("Balance ", balance)
+    return 100-(spending/(balance+spending))*100
 
 # cats = set()
 # for merchant in ((merchantsJson['results'])):
@@ -160,6 +190,7 @@ def graphByCategory(customerID, merchantsJson, transfersJson):
 for i in range(len(accountsJson['results'])):
     x = int(random.random()*len(accountsJson['results']))
     print(x)
-    if graphByMerchant(accountsJson['results'][x]['_id'], merchantsJson, transfersJson):
+    print(getPercentSaved(accountsJson['results'][x]['_id'], accountsJson, transfersJson))
+    if graphByCategory(accountsJson['results'][x]['_id'], merchantsJson, transfersJson, translations):
         break
 #681 is solid
