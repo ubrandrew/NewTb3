@@ -76,10 +76,10 @@ def graphByMerchant(customerID, merchantsJson, transfersJson):
 
         data = [trace]
         layout = go.Layout(
-            title='Categories of Largest Spending',
+            title='Merchants with Largest Spending',
             font=dict(family='Courier New, monospace', size=16, color='#1E8449'),
             xaxis=dict(
-                title='Category',
+                title='Merchant',
                 titlefont=dict(
                     family='Courier New, monospace',
                     size=14,
@@ -97,7 +97,7 @@ def graphByMerchant(customerID, merchantsJson, transfersJson):
         )
         fig = go.Figure(data=data, layout=layout)
 
-        plotly.offline.plot(fig, filename=cwd + '/Graphs/Test.html')
+        plotly.offline.plot(fig, filename=cwd + '/Graphs/MerchantSpending.html')
         return True
 
 
@@ -191,6 +191,6 @@ for i in range(len(accountsJson['results'])):
     x = int(random.random()*len(accountsJson['results']))
     print(x)
     print(getPercentSaved(accountsJson['results'][x]['_id'], accountsJson, transfersJson))
-    if graphByCategory(accountsJson['results'][x]['_id'], merchantsJson, transfersJson, translations):
+    if graphByMerchant(accountsJson['results'][x]['_id'], merchantsJson, transfersJson):
         break
 #681 is solid
