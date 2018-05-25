@@ -137,6 +137,8 @@ def graphByCategory(customerID, merchantsJson, transfersJson, translations):
             x.append(key)
             y.append(spending[key])
 
+        print(x)
+        print(y)
         for i in range(len(x)):
             x[i] = x[i].title()
 
@@ -202,6 +204,22 @@ def getCashBack(customerID, accountsJson, transfersJson, depositsJson):
     if moneyBack <= 0:
         return 0
     return moneyBack
+
+def getPercentSavings(customerID, accountsJson, transfersJson, depositsJson):
+    spending = 0
+    balance = -1
+    revenue = 0
+    for transfer in transfersJson['results']:
+        if transfer['payer_id'] == customerID:
+            spending += transfer['amount']
+
+    for deposits in depositsJson['results']:
+        if deposits['payee_id'] == customerID:
+            revenue += deposits['amount']
+    print("Revenue", revenue)
+    if revenue == 0:
+        return 0
+    return spending/revenue*100
 
 def getAccountDistribution(customerID, depositsJson, transfersJson,categories, translations):
     idToCategory = {}
@@ -332,18 +350,18 @@ def findBestAlternatives(customerID, depositsJson, transfersJson, categories, tr
 #             cats.add(merchant['category'])
 # print(cats)
 
-# for i in range(len(accountsJson['results'])):
-#     x = int(random.random()*len(accountsJson['results']))
-#     print(x)
-#     print(getPercentSaved(accountsJson['results'][x]['_id'], accountsJson, transfersJson))
-#     print("Cash back", getCashBack(accountsJson['results'][x]['_id'], accountsJson, transfersJson, depositsJson))
-#     if graphByMerchant(accountsJson['results'][x]['_id'], merchantsJson, transfersJson):
-#         break
-print("Percent saved",getPercentSaved("79c66be6a73e492741507b6b", accountsJson,transfersJson))
-print("Cash back", getCashBack("79c66be6a73e492741507b6b", accountsJson,transfersJson, depositsJson))
-#graphByMerchant("79c66be6a73e492741507b6b", merchantsJson,transfersJson)
-#graphByCategory("79c66be6a73e492741507b6b", merchantsJson,transfersJson,translations)
-print(getPercentChangeFromAverage("79c66be6a73e492741507b6b", depositsJson, transfersJson, categories, translations))
-print(findBestAlternatives("79c66be6a73e492741507b6b", depositsJson, transfersJson, categories, translations, "health", merchantsJson))
+for i in range(len(accountsJson['results'])):
+    x = int(random.random()*len(accountsJson['results']))
+    print(x)
+    print(getPercentSaved(accountsJson['results'][x]['_id'], accountsJson, transfersJson))
+    print("Cash back", getCashBack(accountsJson['results'][x]['_id'], accountsJson, transfersJson, depositsJson))
+    if graphByMerchant(accountsJson['results'][x]['_id'], merchantsJson, transfersJson):
+        break
+# print("Percent saved",getPercentSaved("79c66be6a73e492741507b6b", accountsJson,transfersJson))
+# print("Cash back", getCashBack("79c66be6a73e492741507b6b", accountsJson,transfersJson, depositsJson))
+# graphByMerchant("79c66be6a73e492741507b6b", merchantsJson,transfersJson)
+# graphByCategory("79c66be6a73e492741507b6b", merchantsJson,transfersJson,translations)
+# print(getPercentChangeFromAverage("79c66be6a73e492741507b6b", depositsJson, transfersJson, categories, translations))
+# print(findBestAlternatives("79c66be6a73e492741507b6b", depositsJson, transfersJson, categories, translations, "health", merchantsJson))
 
 #681 is solid
