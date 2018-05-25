@@ -92,8 +92,7 @@ def makeWebhookResult(req):
         percent_change = getPercentChangeFromAverage(customerIDTest, depositsJson, transfersJson, categories, translations)
         print(percent_change.items())
         for key, val in percent_change.items():
-            speech += "You are spending " + str(val) + "% more on " + key + " than the average user."
-            print("hi")
+            speech += "In the " + key + " category, you are spending " + str(val) + "% more than the average user."
 
         print("Response:")
         print(speech)
@@ -105,17 +104,18 @@ def makeWebhookResult(req):
         parameters = queryResult.get("parameters")
 
         temp = parameters.get("spendingType")
-        #print(str(temp))
-        if temp == None
-
-
         speech = ""
+        #print(str(temp))
         alternative_shop = findBestAlternatives(customerIDTest, depositsJson, transfersJson, categories, translations, temp, merchantsJson)
+        print("YEE " + alternative_shop)
+        if alternative_shop == "None":
+            speech += "Well done! You're budgeting great!"
 
-        speech += "Based on other users who are budgeting well, we suggest that you shop from " + alternative_shop + " instead."
+        else:
+            speech += "Based on other users who are budgeting well, we suggest that you shop from " + alternative_shop + " instead."
+            print("Response:")
+            print(speech)
 
-        print("Response:")
-        print(speech)
 
         return {
             "fulfillmentText": str(speech),
