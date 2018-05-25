@@ -220,11 +220,15 @@ def getCashBack(customerID, accountsJson, transfersJson, depositsJson):
 #             cats.add(merchant['category'])
 # print(cats)
 
-for i in range(len(accountsJson['results'])):
-    x = int(random.random()*len(accountsJson['results']))
-    print(x)
-    print(getPercentSaved(accountsJson['results'][x]['_id'], accountsJson, transfersJson))
-    print("Cash back", getCashBack(accountsJson['results'][x]['_id'], accountsJson, transfersJson, depositsJson))
-    if graphByMerchant(accountsJson['results'][x]['_id'], merchantsJson, transfersJson):
-        break
+# for i in range(len(accountsJson['results'])):
+#     x = int(random.random()*len(accountsJson['results']))
+#     print(x)
+#     print(getPercentSaved(accountsJson['results'][x]['_id'], accountsJson, transfersJson))
+#     print("Cash back", getCashBack(accountsJson['results'][x]['_id'], accountsJson, transfersJson, depositsJson))
+#     if graphByMerchant(accountsJson['results'][x]['_id'], merchantsJson, transfersJson):
+#         break
+print(getPercentSaved("79c66be6a73e492741507b6b", accountsJson,transfersJson)
+print("Cash back", getCashBack("79c66be6a73e492741507b6b", accountsJson,transfersJson, depositsJson))
+
+
 #681 is solid
