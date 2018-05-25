@@ -270,8 +270,55 @@ def getPercentChangeFromAverage(customerID, depositsJson, transfersJson, categor
         del percentChange[key]
     return percentChange
 
-def findBestAlternatives(customerID, depositsJson, transfersJson, categories, translations):
-    percentChange = getPercentChangeFromAverage(customerID, depositsJson, transfersJson, categories, translations)
+def findBestAlternatives(customerID, depositsJson, transfersJson, categories, translations, category, merchantsJson):
+    idToName = {}
+    for merchant in merchantsJson['results']:
+        if 'name' in merchant:
+            idToName[merchant['_id']] = merchant['name'].title()
+        else:
+            idToName[merchant['_id']] = ['Unknown']
+    idToCategory = {}
+    for merchant in merchantsJson['results']:
+        if 'category' in merchant:
+            idToCategory[merchant['_id']] = merchant['category']
+        else:
+            idToCategory[merchant['_id']] = ['Unknown']
+    revenues = {}
+    numAccounts = 0
+    averages = {}
+    for key in categories:
+        averages[key] = 0
+    for deposit in depositsJson['results']:
+        if deposit['payee_id'] not in revenues:
+            revenues[deposit['payee_id']] = 0
+        try:
+            revenues[deposit['payee_id']] += float(deposit['amount'])
+        except:
+            revenues[deposit['payee_id']] += 0
+    customerRevenue = revenues[customerID]
+    alternatives = {}
+    for id, revenue in revenues.items():
+        if id != customerID:
+            # if ((revenue-customerRevenue)/revenue)**2<=.1:
+            # Commented out and made the below == for data creation purposes, but the above would be used if the data in Nessie wasn't fake
+            if revenue == customerRevenue:
+                for transfer in transfersJson['results']:
+                    if id == transfer['payer_id']:
+                        if category in idToCategory[transfer['payee_id']]:
+                            if idToName[transfer['payee_id']] not in alternatives:
+                                alternatives[idToName[transfer['payee_id']]] =0
+                            alternatives[idToName[transfer['payee_id']]] +=1
+    max = -1
+    maxKey = "None"
+    for key, value in alternatives.items():
+        if value > max:
+            max = value
+            maxKey = key
+    return maxKey
+
+
+
+
     
 
 
@@ -297,5 +344,6 @@ print("Cash back", getCashBack("79c66be6a73e492741507b6b", accountsJson,transfer
 #graphByMerchant("79c66be6a73e492741507b6b", merchantsJson,transfersJson)
 #graphByCategory("79c66be6a73e492741507b6b", merchantsJson,transfersJson,translations)
 print(getPercentChangeFromAverage("79c66be6a73e492741507b6b", depositsJson, transfersJson, categories, translations))
+print(findBestAlternatives("79c66be6a73e492741507b6b", depositsJson, transfersJson, categories, translations, "health", merchantsJson))
 
 #681 is solid
