@@ -1,0 +1,20 @@
+PODS:
+  - ResearchKit (1.5.2)
+  - TCProgressBar (0.4)
+
+DEPENDENCIES:
+  - ResearchKit
+  - TCProgressBar
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - ResearchKit
+    - TCProgressBar
+
+SPEC CHECKSUMS:
+  ResearchKit: a5770681dd61afddd3d1f24d232b9abf00cba454
+  TCProgressBar: 14bf8cce9d9a4dae2d82fe88b8e9c45709ebe55d
+
+PODFILE CHECKSUM: 48e842180cf011b0650e9dedcbd746767e705376
+
+COCOAPODS: 1.5.2
