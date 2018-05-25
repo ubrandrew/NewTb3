@@ -249,7 +249,7 @@ def getPercentChangeFromAverage(customerID, depositsJson, transfersJson, categor
                 for key, value in spending.items():
                     if key not in averages:
                         averages[key] = 0
-                    averages[key] += value
+                    averages[key] += value*customerRevenue/revenue
     for key, value in averages.items():
         averages[key] = averages[key]/numAccounts
     zeroCategories = list()
@@ -268,8 +268,12 @@ def getPercentChangeFromAverage(customerID, depositsJson, transfersJson, categor
             zeroCategories.append(key)
     for key in zeroCategories:
         del percentChange[key]
-
     return percentChange
+
+def findBestAlternatives(customerID, depositsJson, transfersJson, categories, translations):
+    percentChange = getPercentChangeFromAverage(customerID, depositsJson, transfersJson, categories, translations)
+    
+
 
 # cats = set()
 # for merchant in ((merchantsJson['results'])):
