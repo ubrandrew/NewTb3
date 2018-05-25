@@ -72,6 +72,7 @@ def graphByMerchant(customerID, merchantsJson, transfersJson):
         if transfer['payer_id'] == customerID:
             if idToName[transfer['payee_id']] not in spending:
                 spending[idToName[transfer['payee_id']]] = 0
+            print(transfer['payee_id'])
             spending[idToName[transfer['payee_id']]] += transfer['amount']
     if spending:
         x = list()
@@ -119,9 +120,10 @@ def graphByCategory(customerID, merchantsJson, transfersJson, translations):
     spending = {}
     for transfer in transfersJson['results']:
         if transfer['payer_id'] == customerID:
-            if 'transaction_date' in transfer:
+            #if 'transaction_date' in transfer:
                 if 1:#transfer['transaction_date'][0:7] == "2016-02":
                     for category in idToCategory[transfer['payee_id']]:
+                        print(category)
                         if category in translations:
                             if category not in spending:
                                 spending[translations[category]] = 0
@@ -129,6 +131,7 @@ def graphByCategory(customerID, merchantsJson, transfersJson, translations):
                                 spending[translations[category]]+=float(transfer['amount'])
                             except:
                                 spending[translations[category]] += 0
+    print(spending)
 
     if spending:
         x = list()
@@ -205,6 +208,9 @@ def getCashBack(customerID, accountsJson, transfersJson, depositsJson):
         return 0
     return moneyBack
 
+def getAverageofBracket():
+    return True
+
 
 # cats = set()
 # for merchant in ((merchantsJson['results'])):
@@ -227,6 +233,5 @@ print("Percent saved",getPercentSaved("79c66be6a73e492741507b6b", accountsJson,t
 print("Cash back", getCashBack("79c66be6a73e492741507b6b", accountsJson,transfersJson, depositsJson))
 graphByMerchant("79c66be6a73e492741507b6b", merchantsJson,transfersJson)
 graphByCategory("79c66be6a73e492741507b6b", merchantsJson,transfersJson,translations)
-
 
 #681 is solid

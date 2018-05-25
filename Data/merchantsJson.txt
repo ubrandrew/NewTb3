@@ -73785,7 +73785,7 @@
 		"name": "Darden Restaurants"
 	}, {
 		"_id": "5b06f21ff0cec56abfa40ad2",
-		"category": "entertainment",
+		"category": ["entertainment"],
 		"creation_date": "2018-05-24",
 		"name": "GameStop"
 	}, {
@@ -74583,7 +74583,7 @@
 	}, {
 		"_id": "5b06f3dbf0cec56abfa40b99",
 		"creation_date": "2018-05-24",
-		"category": "health",
+		"category": ["health"],
 		"name": "Good Neighbor Pharmacy"
 	}, {
 		"_id": "5b06f3dbf0cec56abfa40b9a",
@@ -74723,7 +74723,7 @@
 		"name": "Dell"
 	}, {
 		"_id": "5b06f3f8f0cec56abfa40bbc",
-		"category": "shopping",
+		"category": ["shopping"],
 		"creation_date": "2018-05-24",
 		"name": "Wal-Mart"
 	}, {
