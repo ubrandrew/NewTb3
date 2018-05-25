@@ -32,11 +32,11 @@ cwd = os.getcwd()
 #     json.dump(accountsJson, outfile)
 
 
-depositRequest = "http://api.reimaginebanking.com/enterprise/deposits?key=c49ecda776f1db2451f202eb71f21c1d"
-depositsJson = requests.get(depositRequest).json()
+#depositRequest = "http://api.reimaginebanking.com/enterprise/deposits?key=c49ecda776f1db2451f202eb71f21c1d"
+#depositsJson = requests.get(depositRequest).json()
 
-with open(cwd+'/Data/depositsJson.txt', 'w+') as outfile:
-     json.dump(depositsJson, outfile)
+#with open(cwd+'/Data/depositsJson.txt', 'w+') as outfile:
+#     json.dump(depositsJson, outfile)
 
 categories = ['entertainment', 'transportation', 'food', 'health', 'shopping']
 
@@ -106,7 +106,6 @@ def graphByMerchant(customerID, merchantsJson, transfersJson):
         fig = go.Figure(data=data, layout=layout)
 
         plotly.offline.plot(fig, filename=cwd + '/Graphs/MerchantSpending.html')
-        return True
 
 
 
@@ -167,27 +166,24 @@ def graphByCategory(customerID, merchantsJson, transfersJson, translations):
         fig = go.Figure(data=data, layout=layout)
 
         plotly.offline.plot(fig, filename=cwd+'/Graphs/GeneralCategories.html')
-        return True
 
 
 def getPercentSaved(customerID, accountsJson, transfersJson):
     spending = 0
-    balance = -1
+    revenue = -1
     for transfer in transfersJson['results']:
         if transfer['payer_id'] == customerID:
             spending += transfer['amount']
-    print("Spending ", spending)
-    for account in accountsJson['results']:
-        if account['_id'] == customerID:
-            balance = account['balance']
-    if balance == -1 or balance == 0:
+    for deposits in depositsJson['results']:
+        if deposits['payee_id'] == customerID:
+            if revenue<0:
+                revenue = 0
+            revenue += deposits['amount']
+    if revenue == 0 or revenue ==-1:
         return 0
-    print("Balance ", balance)
-    return 100-(spending/(balance+spending))*100
-
+    return spending/revenue*100
 
 def getCashBack(customerID, accountsJson, transfersJson, depositsJson):
-    #TODO Spending/revenue
     spending = 0
     balance = -1
     revenue = 0
@@ -201,9 +197,9 @@ def getCashBack(customerID, accountsJson, transfersJson, depositsJson):
         if deposits['payee_id'] == customerID:
             revenue += deposits['amount']
     print("Revenue", revenue)
-    if balance == -1 or revenue == 0:
+    if revenue == 0:
         return 0
-    moneyBack = (.01+spending/revenue*.1) * balance
+    moneyBack = (.01+spending/revenue*.1) * revenue
 
     if moneyBack <= 0:
         return 0
@@ -227,8 +223,10 @@ def getCashBack(customerID, accountsJson, transfersJson, depositsJson):
 #     print("Cash back", getCashBack(accountsJson['results'][x]['_id'], accountsJson, transfersJson, depositsJson))
 #     if graphByMerchant(accountsJson['results'][x]['_id'], merchantsJson, transfersJson):
 #         break
-print(getPercentSaved("79c66be6a73e492741507b6b", accountsJson,transfersJson)
+print("Percent saved",getPercentSaved("79c66be6a73e492741507b6b", accountsJson,transfersJson))
 print("Cash back", getCashBack("79c66be6a73e492741507b6b", accountsJson,transfersJson, depositsJson))
+graphByMerchant("79c66be6a73e492741507b6b", merchantsJson,transfersJson)
+graphByCategory("79c66be6a73e492741507b6b", merchantsJson,transfersJson,translations)
 
 
 #681 is solid
