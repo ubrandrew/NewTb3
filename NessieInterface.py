@@ -72,7 +72,6 @@ def graphByMerchant(customerID, merchantsJson, transfersJson):
         if transfer['payer_id'] == customerID:
             if idToName[transfer['payee_id']] not in spending:
                 spending[idToName[transfer['payee_id']]] = 0
-            print(transfer['payee_id'])
             spending[idToName[transfer['payee_id']]] += transfer['amount']
     if spending:
         x = list()
@@ -123,7 +122,6 @@ def graphByCategory(customerID, merchantsJson, transfersJson, translations):
             #if 'transaction_date' in transfer:
                 if 1:#transfer['transaction_date'][0:7] == "2016-02":
                     for category in idToCategory[transfer['payee_id']]:
-                        print(category)
                         if category in translations:
                             if category not in spending:
                                 spending[translations[category]] = 0
@@ -131,7 +129,6 @@ def graphByCategory(customerID, merchantsJson, transfersJson, translations):
                                 spending[translations[category]]+=float(transfer['amount'])
                             except:
                                 spending[translations[category]] += 0
-    print(spending)
 
     if spending:
         x = list()
@@ -193,9 +190,7 @@ def getCashBack(customerID, accountsJson, transfersJson, depositsJson):
     for transfer in transfersJson['results']:
         if transfer['payer_id'] == customerID:
             spending += transfer['amount']
-    for account in accountsJson['results']:
-        if account['_id'] == customerID:
-            balance = account['balance']
+
     for deposits in depositsJson['results']:
         if deposits['payee_id'] == customerID:
             revenue += deposits['amount']
@@ -208,9 +203,73 @@ def getCashBack(customerID, accountsJson, transfersJson, depositsJson):
         return 0
     return moneyBack
 
-def getAverageofBracket():
-    return True
+def getAccountDistribution(customerID, depositsJson, transfersJson,categories, translations):
+    idToCategory = {}
+    for merchant in merchantsJson['results']:
+        if 'category' in merchant:
+            idToCategory[merchant['_id']] = merchant['category']
+        else:
+            idToCategory[merchant['_id']] = ['Unknown']
+    spending = {}
+    for transfer in transfersJson['results']:
+        if transfer['payer_id'] == customerID:
+            for category in idToCategory[transfer['payee_id']]:
+                if category in translations:
+                    if translations[category] not in spending:
+                        spending[translations[category]] = 0
+                    try:
+                        spending[translations[category]] += float(transfer['amount'])
+                    except:
+                        spending[translations[category]] += 0
+    return spending
 
+
+
+def getPercentChangeFromAverage(customerID, depositsJson, transfersJson, categories, translations):
+    revenues = {}
+    numAccounts = 0
+    averages = {}
+    for key in categories:
+        averages[key] = 0
+    for deposit in depositsJson['results']:
+        if deposit['payee_id'] not in revenues:
+            revenues[deposit['payee_id']] = 0
+        try:
+            revenues[deposit['payee_id']] += float(deposit['amount'])
+        except:
+            revenues[deposit['payee_id']] += 0
+    customerRevenue = revenues[customerID]
+    for id, revenue in revenues.items():
+        if id != customerID:
+            #if ((revenue-customerRevenue)/revenue)**2<=.1:
+            #Commented out for data creation purposes, but the above would be used if the data in Nessie wasn't fake
+            if revenue == customerRevenue:
+                spending = getAccountDistribution(id, depositsJson, transfersJson, categories, translations)
+                numAccounts+=1
+                for key, value in spending.items():
+                    if key not in averages:
+                        averages[key] = 0
+                    averages[key] += value
+    for key, value in averages.items():
+        averages[key] = averages[key]/numAccounts
+    zeroCategories = list()
+    for key, value in averages.items():
+        if value == 0:
+            zeroCategories.append(key)
+    for key in zeroCategories:
+        del averages[key]
+    spending = getAccountDistribution(customerID, depositsJson, transfersJson, categories, translations)
+    percentChange = {}
+    for key, value in averages.items():
+        percentChange[key] = (spending[key]-value)/value*100
+    zeroCategories.clear()
+    for key, value in percentChange.items():
+        if value <= 0:
+            zeroCategories.append(key)
+    for key in zeroCategories:
+        del percentChange[key]
+
+    return percentChange
 
 # cats = set()
 # for merchant in ((merchantsJson['results'])):
@@ -231,7 +290,8 @@ def getAverageofBracket():
 #         break
 print("Percent saved",getPercentSaved("79c66be6a73e492741507b6b", accountsJson,transfersJson))
 print("Cash back", getCashBack("79c66be6a73e492741507b6b", accountsJson,transfersJson, depositsJson))
-graphByMerchant("79c66be6a73e492741507b6b", merchantsJson,transfersJson)
-graphByCategory("79c66be6a73e492741507b6b", merchantsJson,transfersJson,translations)
+#graphByMerchant("79c66be6a73e492741507b6b", merchantsJson,transfersJson)
+#graphByCategory("79c66be6a73e492741507b6b", merchantsJson,transfersJson,translations)
+print(getPercentChangeFromAverage("79c66be6a73e492741507b6b", depositsJson, transfersJson, categories, translations))
 
 #681 is solid

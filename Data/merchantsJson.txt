@@ -13346,7 +13346,7 @@
 			"street number": "21398",
 			"zip": "20164"
 		},
-		"category": "health",
+		"category": ["health"],
 		"geocode": {
 			"lat": 39.02338349999999,
 			"lng": -77.4016417
@@ -72178,7 +72178,7 @@
 	}, {
 		"_id": "5b06eef0f0cec56abfa40940",
 		"creation_date": "2018-05-24",
-		"name": "Good Neighbor Pharmacy"
+		"name": "Organic Pharmacy"
 	}, {
 		"_id": "5b06eef0f0cec56abfa40941",
 		"creation_date": "2018-05-24",
@@ -72578,7 +72578,7 @@
 	}, {
 		"_id": "5b06ef48f0cec56abfa409a4",
 		"creation_date": "2018-05-24",
-		"name": "Good Neighbor Pharmacy"
+		"name": "Organic Pharmacy"
 	}, {
 		"_id": "5b06ef48f0cec56abfa409a5",
 		"creation_date": "2018-05-24",
@@ -72978,7 +72978,7 @@
 	}, {
 		"_id": "5b06f1d9f0cec56abfa40a08",
 		"creation_date": "2018-05-24",
-		"name": "Good Neighbor Pharmacy"
+		"name": "Organic Pharmacy"
 	}, {
 		"_id": "5b06f1daf0cec56abfa40a09",
 		"creation_date": "2018-05-24",
@@ -73378,7 +73378,7 @@
 	}, {
 		"_id": "5b06f1fcf0cec56abfa40a6c",
 		"creation_date": "2018-05-24",
-		"name": "Good Neighbor Pharmacy"
+		"name": "Organic Pharmacy"
 	}, {
 		"_id": "5b06f1fcf0cec56abfa40a6d",
 		"creation_date": "2018-05-24",
@@ -73778,7 +73778,7 @@
 	}, {
 		"_id": "5b06f21ff0cec56abfa40ad0",
 		"creation_date": "2018-05-24",
-		"name": "Good Neighbor Pharmacy"
+		"name": "Organic Pharmacy"
 	}, {
 		"_id": "5b06f21ff0cec56abfa40ad1",
 		"creation_date": "2018-05-24",
@@ -74179,7 +74179,7 @@
 	}, {
 		"_id": "5b06f25af0cec56abfa40b34",
 		"creation_date": "2018-05-24",
-		"name": "Good Neighbor Pharmacy"
+		"name": "Organic Pharmacy"
 	}, {
 		"_id": "5b06f25af0cec56abfa40b35",
 		"creation_date": "2018-05-24",
@@ -74584,7 +74584,7 @@
 		"_id": "5b06f3dbf0cec56abfa40b99",
 		"creation_date": "2018-05-24",
 		"category": ["health"],
-		"name": "Good Neighbor Pharmacy"
+		"name": "Organic Pharmacy"
 	}, {
 		"_id": "5b06f3dbf0cec56abfa40b9a",
 		"creation_date": "2018-05-24",
@@ -74725,7 +74725,7 @@
 		"_id": "5b06f3f8f0cec56abfa40bbc",
 		"category": ["shopping"],
 		"creation_date": "2018-05-24",
-		"name": "Wal-Mart"
+		"name": "Trader Joes"
 	}, {
 		"_id": "5b06f3f8f0cec56abfa40bbd",
 		"creation_date": "2018-05-24",
@@ -74733,6 +74733,7 @@
 	}, {
 		"_id": "5b06f3f8f0cec56abfa40bbe",
 		"creation_date": "2018-05-24",
+		"category":["shopping"],
 		"name": "Costco"
 	}, {
 		"_id": "5b06f3f8f0cec56abfa40bbf",
@@ -74985,7 +74986,7 @@
 	}, {
 		"_id": "5b06f3f9f0cec56abfa40bfd",
 		"creation_date": "2018-05-24",
-		"name": "Good Neighbor Pharmacy"
+		"name": "Organic Pharmacy"
 	}, {
 		"_id": "5b06f3f9f0cec56abfa40bfe",
 		"creation_date": "2018-05-24",
@@ -75124,7 +75125,7 @@
 		"name": "Dell"
 	}, {
 		"_id": "7706f3faf0cec56abfa40c1f",
-		"category": "entertainment",
+		"category": ["entertainment"],
 		"creation_date": "2018-05-24",
 		"name": "Steam"
 	}]
