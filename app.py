@@ -11,41 +11,8 @@ import sys
 
 app = Flask(__name__)
 
-@app.route('/webhook', methods=['POST'])
-def webhook():
-    req = request.get_json(silent=True, force=True)
+customerIDTest = "79c66be6a73e492741507b6b"
 
-    print("Request:")
-    print(json.dumps(req, indent=4))
-
-    res = makeWebhookResult(req)
-
-    res = json.dumps(res, indent=4)
-    print(res)
-    r = make_response(res)
-    r.headers['Content-Type'] = 'application/json'
-    return r
-
-def makeWebhookResult(req):
-    print(req)
-    if req.get("queryResult").get("action") != "test":
-        print("I don't know this action")
-        return {}
-    parameters = req.get("parameters")
-    #zone = parameters.get("shipping-zone")
-
-    speech = "Hello, world!!!"
-
-    print("Response:")
-    print(speech)
-
-    return {
-        "fulfillmentText": speech,
-        #"displayText": speech,
-        #"data": {},
-        # "contextOut": [],
-        #"source": "notsurethismatters"
-    }
 
 @app.route('/')
 def index():
@@ -80,17 +47,84 @@ for key, value in backTranslations.items():
     for val in value:
         translations[val] = key
 
+categories = ['entertainment', 'transportation', 'food', 'health', 'shopping']
 merchantsJson = json.load(open(cwd+'/Data/merchantsJson.txt'))
 transfersJson = json.load((open(cwd+'/Data/transfersJson.txt')))
 #customersJson = json.load((open(cwd+'/Data/customersJson.txt')))
 accountsJson = json.load(open(cwd+'/Data/accountsJson.txt'))
+depositsJson = json.load(open(cwd+ '/Data/depositsJson.txt'))
+
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    req = request.get_json(silent=True, force=True)
+
+    print("Request:")
+    print(json.dumps(req, indent=4))
+
+    res = makeWebhookResult(req)
+
+    res = json.dumps(res, indent=4)
+    print(res)
+    r = make_response(res)
+    r.headers['Content-Type'] = 'application/json'
+    return r
+
+def makeWebhookResult(req):
+    print(req)
+
+    '''
+    if "whats my budget",  then
+        compare to average customer data
+        displays spend less in specific Categories
+
+    else if "How can i spend less on _____"
+        action is "suggest"
+
+        ex: how can i spend less on food:
+        checks accounts with higher progress and same bracket
+
+        '''
+
+    queryResult = req.get("queryResult")
+    if queryResult.get("action") == "budget":
+        speech = ""
+        #this is how you compare to other users:
+        percent_change = getPercentChangeFromAverage(customerIDTest, depositsJson, transfersJson, categories, translations)
+        print(percent_change.items())
+        for key, val in percent_change.items():
+            speech += "You are spending " + str(val) + "% more on " + key + " than the average user."
+            print("hi")
+
+        print("Response:")
+        print(speech)
+
+        return {
+            "fulfillmentText": str(speech),
+        }
+    elif queryResult.get("action") == "suggest":
+        parameters = queryResult.get("parameters")
+
+        temp = parameters.get("spendingType")
+        #print(str(temp))
+        if temp == None
+
+
+        speech = ""
+        alternative_shop = findBestAlternatives(customerIDTest, depositsJson, transfersJson, categories, translations, temp, merchantsJson)
+
+        speech += "Based on other users who are budgeting well, we suggest that you shop from " + alternative_shop + " instead."
+
+        print("Response:")
+        print(speech)
+
+        return {
+            "fulfillmentText": str(speech),
+        }
 
 
 
 def graphByMerchant(customerID, merchantsJson, transfersJson):
     idToName = {}
-    cwd = os.getcwd()
-
     for merchant in merchantsJson['results']:
         if 'name' in merchant:
             idToName[merchant['_id']] = merchant['name'].title()
@@ -135,14 +169,11 @@ def graphByMerchant(customerID, merchantsJson, transfersJson):
         fig = go.Figure(data=data, layout=layout)
 
         plotly.offline.plot(fig, filename=cwd + '/Graphs/MerchantSpending.html')
-        return True
 
 
 
 def graphByCategory(customerID, merchantsJson, transfersJson, translations):
     idToCategory = {}
-    cwd = os.getcwd()
-
     for merchant in merchantsJson['results']:
         if 'category' in merchant:
             idToCategory[merchant['_id']] = merchant['category']
@@ -151,7 +182,7 @@ def graphByCategory(customerID, merchantsJson, transfersJson, translations):
     spending = {}
     for transfer in transfersJson['results']:
         if transfer['payer_id'] == customerID:
-            if 'transaction_date' in transfer:
+            #if 'transaction_date' in transfer:
                 if 1:#transfer['transaction_date'][0:7] == "2016-02":
                     for category in idToCategory[transfer['payee_id']]:
                         if category in translations:
@@ -198,24 +229,159 @@ def graphByCategory(customerID, merchantsJson, transfersJson, translations):
         fig = go.Figure(data=data, layout=layout)
 
         plotly.offline.plot(fig, filename=cwd+'/Graphs/GeneralCategories.html')
-        return True
 
-
+#how much money saved
 def getPercentSaved(customerID, accountsJson, transfersJson):
     spending = 0
-    balance = -1
-    print("Savings:\n")
+    revenue = -1
     for transfer in transfersJson['results']:
         if transfer['payer_id'] == customerID:
             spending += transfer['amount']
-    print("Spending ", spending)
-    for account in accountsJson['results']:
-        if account['_id'] == customerID:
-            balance = account['balance']
-    if balance == -1 or balance == 0:
+    for deposits in depositsJson['results']:
+        if deposits['payee_id'] == customerID:
+            if revenue<0:
+                revenue = 0
+            revenue += deposits['amount']
+    if revenue == 0 or revenue ==-1:
         return 0
-    print("Balance ", balance)
-    return 100-(spending/(balance+spending))*100
+    return spending/revenue*100
+
+
+def getCashBack(customerID, accountsJson, transfersJson, depositsJson):
+    spending = 0
+    balance = -1
+    revenue = 0
+    for transfer in transfersJson['results']:
+        if transfer['payer_id'] == customerID:
+            spending += transfer['amount']
+
+    for deposits in depositsJson['results']:
+        if deposits['payee_id'] == customerID:
+            revenue += deposits['amount']
+    print("Revenue", revenue)
+    if revenue == 0:
+        return 0
+    moneyBack = (.01+spending/revenue*.1) * revenue
+
+    if moneyBack <= 0:
+        return 0
+    return moneyBack
+
+def getAccountDistribution(customerID, depositsJson, transfersJson,categories, translations):
+    idToCategory = {}
+    for merchant in merchantsJson['results']:
+        if 'category' in merchant:
+            idToCategory[merchant['_id']] = merchant['category']
+        else:
+            idToCategory[merchant['_id']] = ['Unknown']
+    spending = {}
+    for transfer in transfersJson['results']:
+        if transfer['payer_id'] == customerID:
+            for category in idToCategory[transfer['payee_id']]:
+                if category in translations:
+                    if translations[category] not in spending:
+                        spending[translations[category]] = 0
+                    try:
+                        spending[translations[category]] += float(transfer['amount'])
+                    except:
+                        spending[translations[category]] += 0
+    return spending
+
+
+#compares user with others
+def getPercentChangeFromAverage(customerID, depositsJson, transfersJson, categories, translations):
+    revenues = {}
+    numAccounts = 0
+    averages = {}
+    for key in categories:
+        averages[key] = 0
+    for deposit in depositsJson['results']:
+        if deposit['payee_id'] not in revenues:
+            revenues[deposit['payee_id']] = 0
+        try:
+            revenues[deposit['payee_id']] += float(deposit['amount'])
+        except:
+            revenues[deposit['payee_id']] += 0
+    customerRevenue = revenues[customerID]
+    for id, revenue in revenues.items():
+        if id != customerID:
+            #if ((revenue-customerRevenue)/revenue)**2<=.1:
+            #Commented out for data creation purposes, but the above would be used if the data in Nessie wasn't fake
+            if revenue == customerRevenue:
+                spending = getAccountDistribution(id, depositsJson, transfersJson, categories, translations)
+                numAccounts+=1
+                for key, value in spending.items():
+                    if key not in averages:
+                        averages[key] = 0
+                    averages[key] += value*customerRevenue/revenue
+    for key, value in averages.items():
+        averages[key] = averages[key]/numAccounts
+    zeroCategories = list()
+    for key, value in averages.items():
+        if value == 0:
+            zeroCategories.append(key)
+    for key in zeroCategories:
+        del averages[key]
+    spending = getAccountDistribution(customerID, depositsJson, transfersJson, categories, translations)
+    percentChange = {}
+    for key, value in averages.items():
+        percentChange[key] = (spending[key]-value)/value*100
+    zeroCategories.clear()
+    for key, value in percentChange.items():
+        if value <= 0:
+            zeroCategories.append(key)
+    for key in zeroCategories:
+        del percentChange[key]
+    return percentChange
+
+# brackets, You could spend less in.... (suggest)
+def findBestAlternatives(customerID, depositsJson, transfersJson, categories, translations, category, merchantsJson):
+    idToName = {}
+    print(category)
+    for merchant in merchantsJson['results']:
+        if 'name' in merchant:
+            idToName[merchant['_id']] = merchant['name'].title()
+        else:
+            idToName[merchant['_id']] = ['Unknown']
+    idToCategory = {}
+    for merchant in merchantsJson['results']:
+        if 'category' in merchant:
+            idToCategory[merchant['_id']] = merchant['category']
+        else:
+            idToCategory[merchant['_id']] = ['Unknown']
+    revenues = {}
+    numAccounts = 0
+    averages = {}
+    for key in categories:
+        averages[key] = 0
+    for deposit in depositsJson['results']:
+        if deposit['payee_id'] not in revenues:
+            revenues[deposit['payee_id']] = 0
+        try:
+            revenues[deposit['payee_id']] += float(deposit['amount'])
+        except:
+            revenues[deposit['payee_id']] += 0
+    customerRevenue = revenues[customerID]
+    alternatives = {}
+    for id, revenue in revenues.items():
+        if id != customerID:
+            # if ((revenue-customerRevenue)/revenue)**2<=.1:
+            # Commented out and made the below == for data creation purposes, but the above would be used if the data in Nessie wasn't fake
+            if revenue == customerRevenue:
+                for transfer in transfersJson['results']:
+                    if id == transfer['payer_id']:
+                        if category in idToCategory[transfer['payee_id']]:
+                            if idToName[transfer['payee_id']] not in alternatives:
+                                alternatives[idToName[transfer['payee_id']]] =0
+                            alternatives[idToName[transfer['payee_id']]] +=1
+    max = -1
+    maxKey = "None"
+    for key, value in alternatives.items():
+        if value > max:
+            max = value
+            maxKey = key
+    return maxKey
+
 
 @app.route('/todo/api/v1.0/datavis/<int:data_id>', methods=['GET'])
 def get_data_id(data_id):
@@ -228,7 +394,6 @@ def get_data_id(data_id):
     graphByMerchant(accountsJson['results'][data_id]['_id'], merchantsJson, transfersJson)
 
     return jsonify({'data_list': accountsJson['results'][data_id]})
-
 
 
 if __name__ == '__main__':

@@ -1,0 +1,6 @@
+framework module Pods_CapitalOneApp {
+  umbrella header "Pods-CapitalOneApp-umbrella.h"
+
+  export *
+  module * { export * }
+}
