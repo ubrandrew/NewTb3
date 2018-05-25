@@ -48,11 +48,11 @@ depositsJson = json.load(open(cwd+ '/Data/depositsJson.txt'))
 
 
 backTranslations = {
-"entertainment" : ['Manicure', 'museum', 'investing', 'Hotel', 'Hair Salon', 'Goldfish', 'Cosmetics',  'drugs', 'car rental', 'enterntainment',  'Night Club', 'movie_theater', 'hair_care', 'Travel', 'porn'],
-"food" : ['Food/Drink', 'coffee', 'Groceries', 'Restaurant', 'fast food', 'American Restaurant', 'Pizza Restaurant', 'Food and Beverage', 'Salads'],
-"transportation" : ['gas', 'gas_station', 'Transport'],
-"health" : ['electronics', 'hospital', 'health'],
-"shopping" : ['Clothes', 'Shopping', 'post_office', 'Utility Stores', 'loan', 'supermarket', 'furniture_store', 'School Supplies', 'home_goods_store', 'shoe_store']
+"entertainment" : ['entertainment','Manicure', 'museum', 'investing', 'Hotel', 'Hair Salon', 'Goldfish', 'Cosmetics',  'drugs', 'car rental', 'enterntainment',  'Night Club', 'movie_theater', 'hair_care', 'Travel', 'porn'],
+"food" : ['food','Food/Drink', 'coffee', 'Groceries', 'Restaurant', 'fast food', 'American Restaurant', 'Pizza Restaurant', 'Food and Beverage', 'Salads'],
+"transportation" : ['transportation','gas', 'gas_station', 'Transport'],
+"health" : ['health','electronics', 'hospital', 'health'],
+"shopping" : ['shopping','Clothes', 'Shopping', 'post_office', 'Utility Stores', 'loan', 'supermarket', 'furniture_store', 'School Supplies', 'home_goods_store', 'shoe_store']
 }
 translations = {}
 for key, value in backTranslations.items():
