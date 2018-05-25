@@ -20,6 +20,7 @@
 		8A847ECC20B7819800EE9552 /* MainHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A847ECB20B7819800EE9552 /* MainHeader.swift */; };
 		8A847ECE20B78A2100EE9552 /* MainNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A847ECD20B78A2100EE9552 /* MainNavController.swift */; };
 		8A847ED020B791D800EE9552 /* AdviceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A847ECF20B791D800EE9552 /* AdviceController.swift */; };
+		8A847ED220B7CBFB00EE9552 /* BotController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A847ED120B7CBFB00EE9552 /* BotController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		8A847ECB20B7819800EE9552 /* MainHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainHeader.swift; sourceTree = "<group>"; };
 		8A847ECD20B78A2100EE9552 /* MainNavController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavController.swift; sourceTree = "<group>"; };
 		8A847ECF20B791D800EE9552 /* AdviceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdviceController.swift; sourceTree = "<group>"; };
+		8A847ED120B7CBFB00EE9552 /* BotController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BotController.swift; sourceTree = "<group>"; };
 		EBF1B3D370A4556E182319C7 /* Pods-CapitalOneApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapitalOneApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-CapitalOneApp/Pods-CapitalOneApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -84,6 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				8A847EB120B716CB00EE9552 /* AppDelegate.swift */,
+				8A847ED120B7CBFB00EE9552 /* BotController.swift */,
 				8A847EB320B716CB00EE9552 /* LoginViewController.swift */,
 				8A847EC520B72AFD00EE9552 /* SurveyController.swift */,
 				8A847EC320B71B1700EE9552 /* DataViewController.swift */,
@@ -203,11 +206,13 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-CapitalOneApp/Pods-CapitalOneApp-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/ApiAI/ApiAI.framework",
 				"${BUILT_PRODUCTS_DIR}/ResearchKit/ResearchKit.framework",
 				"${BUILT_PRODUCTS_DIR}/TCProgressBar/TCProgressBar.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ApiAI.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ResearchKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TCProgressBar.framework",
 			);
@@ -226,6 +231,7 @@
 				8A847ECE20B78A2100EE9552 /* MainNavController.swift in Sources */,
 				8A847EC420B71B1700EE9552 /* DataViewController.swift in Sources */,
 				8A847ECA20B754B900EE9552 /* BarCell.swift in Sources */,
+				8A847ED220B7CBFB00EE9552 /* BotController.swift in Sources */,
 				8A847EB420B716CB00EE9552 /* LoginViewController.swift in Sources */,
 				8A847ED020B791D800EE9552 /* AdviceController.swift in Sources */,
 				8A847ECC20B7819800EE9552 /* MainHeader.swift in Sources */,

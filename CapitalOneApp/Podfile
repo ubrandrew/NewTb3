@@ -8,5 +8,6 @@ target 'CapitalOneApp' do
   # Pods for CapitalOneApp
   pod 'ResearchKit'
   pod 'TCProgressBar'
+  pod 'ApiAI'
 
 end

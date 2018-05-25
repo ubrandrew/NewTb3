@@ -54,7 +54,18 @@ class MainNavController: UIViewController {
     }()
     
     @objc func handleBotPress(){
-        print(43)
+        let botController = BotController()
+        
+        botController.navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "capitalonelogo"))
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        
+        navigationController?.navigationBar.barTintColor = UIColor.rgb(red: 245, green: 241, blue: 237)
+        
+        navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        
+        navigationController?.pushViewController(botController, animated: true)
     }
     
     

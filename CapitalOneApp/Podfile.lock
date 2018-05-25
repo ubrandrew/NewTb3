@@ -1,20 +1,48 @@
 PODS:
+  - ApiAI (0.7.2):
+    - ApiAI/AudioFileConverter (= 0.7.2)
+    - ApiAI/Core (= 0.7.2)
+    - ApiAI/Events (= 0.7.2)
+    - ApiAI/ResponseMapping (= 0.7.2)
+    - ApiAI/UIKit (= 0.7.2)
+    - ApiAI/UserEntities (= 0.7.2)
+    - ApiAI/VoiceFileRequest (= 0.7.2)
+    - ApiAI/VoiceRequest (= 0.7.2)
+  - ApiAI/AudioFileConverter (0.7.2):
+    - ApiAI/Core
+  - ApiAI/Core (0.7.2)
+  - ApiAI/Events (0.7.2):
+    - ApiAI/Core
+  - ApiAI/ResponseMapping (0.7.2):
+    - ApiAI/Core
+  - ApiAI/UIKit (0.7.2):
+    - ApiAI/Core
+    - ApiAI/VoiceRequest
+  - ApiAI/UserEntities (0.7.2):
+    - ApiAI/Core
+  - ApiAI/VoiceFileRequest (0.7.2):
+    - ApiAI/Core
+  - ApiAI/VoiceRequest (0.7.2):
+    - ApiAI/Core
   - ResearchKit (1.5.2)
   - TCProgressBar (0.4)
 
 DEPENDENCIES:
+  - ApiAI
   - ResearchKit
   - TCProgressBar
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - ApiAI
     - ResearchKit
     - TCProgressBar
 
 SPEC CHECKSUMS:
+  ApiAI: d4b49d3736f33ce6f3ef66dc33c0e0fccb23579e
   ResearchKit: a5770681dd61afddd3d1f24d232b9abf00cba454
   TCProgressBar: 14bf8cce9d9a4dae2d82fe88b8e9c45709ebe55d
 
-PODFILE CHECKSUM: 48e842180cf011b0650e9dedcbd746767e705376
+PODFILE CHECKSUM: 69191c20c03048d98d597132ca18c735099fcf4c
 
 COCOAPODS: 1.5.2

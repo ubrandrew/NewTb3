@@ -100,6 +100,7 @@ class LoginViewController: UIViewController, UINavigationControllerDelegate {
 
             
             navigationController?.pushViewController(surveyController, animated: true)
+            print("pass")
         }
         else{
             print("fail")
@@ -114,7 +115,7 @@ class LoginViewController: UIViewController, UINavigationControllerDelegate {
         // Do any additional setup after loading the view, typically from a nib.
         
         view.addSubview(logoImageView)
-        logoImageView.anchor(top: view.topAnchor, left: nil, bottom: nil, right: nil, paddingTop: 63, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 60, height: 60)
+        logoImageView.anchor(top: view.topAnchor, left: nil, bottom: nil, right: nil, paddingTop: 63, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 207, height: 94)
         
         logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
@@ -130,7 +131,7 @@ class LoginViewController: UIViewController, UINavigationControllerDelegate {
         
         view.addSubview(stackView)
         
-        stackView.anchor(top: logoImageView.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 30, paddingLeft: 40, paddingBottom: 0, paddingRight: 40, width: 0, height: 150)
+        stackView.anchor(top: logoImageView.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 10, paddingLeft: 40, paddingBottom: 0, paddingRight: 40, width: 0, height: 150)
         
     }
 

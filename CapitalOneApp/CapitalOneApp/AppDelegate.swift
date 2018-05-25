@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ApiAI
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -22,11 +23,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let navVC = UINavigationController(rootViewController: LoginViewController())
         //let navVC = UINavigationController(rootViewController: DataViewController(collectionViewLayout: UICollectionViewFlowLayout()))
 
+        let configuration = AIDefaultConfiguration()
+        // change the access token to actual client token from dialog flow ("client access token")
+        configuration.clientAccessToken = "29977fa969b14755a6eecfaccf9f00c9"    
+        
+        
+        
+        let apiai = ApiAI.shared()
+        apiai?.configuration = configuration
         
         navVC.setNavigationBarHidden(true, animated: false)
         window?.rootViewController = navVC
 
-        //window?.rootViewController = AdviceController()
+        //window?.rootViewController = BotController()
         
         return true
 
