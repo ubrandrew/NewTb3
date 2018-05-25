@@ -93,7 +93,7 @@ def makeWebhookResult(req):
         percent_change = getPercentChangeFromAverage(customerIDTest, depositsJson, transfersJson, categories, translations)
         print(percent_change.items())
         for key, val in percent_change.items():
-            speech += "In the " + key + " category, you are spending " + str(val) + "% more than the average user."
+            speech += "In the " + key + " category, you are spending " + str(val) + "% more than the average user. "
 
         print("Response:")
         print(speech)
@@ -193,40 +193,9 @@ def graphByMerchant(customerID, merchantsJson, transfersJson):
             if idToName[transfer['payee_id']] not in spending:
                 spending[idToName[transfer['payee_id']]] = 0
             spending[idToName[transfer['payee_id']]] += transfer['amount']
-    if spending:
-        x = list()
-        y = list()
-        for key in spending:
-            x.append(key)
-            y.append(spending[key])
 
-        trace = go.Bar(x=x, y=y)
 
-        data = [trace]
-        layout = go.Layout(
-            title='Merchants with Largest Spending',
-            font=dict(family='Courier New, monospace', size=16, color='#1E8449'),
-            xaxis=dict(
-                title='Merchant',
-                titlefont=dict(
-                    family='Courier New, monospace',
-                    size=14,
-                    color='#7D3C98'
-                )
-            ),
-            yaxis=dict(
-                title='Spending (USD)',
-                titlefont=dict(
-                    family='Courier New, monospace',
-                    size=14,
-                    color='#7D3C98'
-                )
-            )
-        )
-        fig = go.Figure(data=data, layout=layout)
-
-        plotly.offline.plot(fig, filename=cwd + '/Graphs/MerchantSpending.html')
-
+    return jsonify({"data" : spending})
 
 
 
@@ -410,15 +379,13 @@ def findBestAlternatives(customerID, depositsJson, transfersJson, categories, tr
 
 
 
-@app.route('/todo/api/v1.0/datavis/<string:data_id>', methods=['GET'])
-def get_data_id(data_id):
-    data = [data for data in data_list if data['id'] == data_id]
-
-    print(len(accountsJson))
-    print(len(accountsJson['results']))
-
-
+@app.route('/todo/api/v1.0/datavis/category/<string:data_id>', methods=['GET'])
+def get_category(data_id):
     return graphByCategory(data_id, merchantsJson, transfersJson, translations)
+
+@app.route('/todo/api/v1.0/datavis/merchant/<string:data_id>', methods=['GET'])
+def get_merchant(data_id):
+    return graphByMerchant(data_id, merchantsJson, transfersJson)
 
 
 if __name__ == '__main__':
