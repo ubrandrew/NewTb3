@@ -219,7 +219,7 @@ def getPercentSavings(customerID, accountsJson, transfersJson, depositsJson):
     print("Revenue", revenue)
     if revenue == 0:
         return 0
-    return spending/revenue*100
+    return spending/revenue
 
 def getAccountDistribution(customerID, depositsJson, transfersJson,categories, translations):
     idToCategory = {}
