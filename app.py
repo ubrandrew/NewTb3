@@ -7,6 +7,7 @@ import plotly
 import plotly.graph_objs as go
 import random
 import sys
+#from googleplaces import GooglePlaces, types, lang
 
 
 app = Flask(__name__)
@@ -36,11 +37,11 @@ data_list = [
 cwd = os.getcwd()
 
 backTranslations = {
-    "entertainment" : ['Manicure', 'museum', 'investing', 'Hotel', 'Hair Salon', 'Goldfish', 'Cosmetics',  'drugs', 'car rental', 'enterntainment',  'Night Club', 'movie_theater', 'hair_care', 'Travel', 'porn'],
-    "food" : ['Food/Drink', 'coffee', 'Groceries', 'Restaurant', 'fast food', 'American Restaurant', 'Pizza Restaurant', 'Food and Beverage', 'Salads'],
-    "transportation" : ['gas', 'gas_station', 'Transport'],
-    "health" : ['electronics', 'hospital', 'health'],
-    "shopping" : ['Clothes', 'Shopping', 'post_office', 'Utility Stores', 'loan', 'supermarket', 'furniture_store', 'School Supplies', 'home_goods_store', 'shoe_store']
+"entertainment" : ['entertainment','Manicure', 'museum', 'investing', 'Hotel', 'Hair Salon', 'Goldfish', 'Cosmetics',  'drugs', 'car rental', 'enterntainment',  'Night Club', 'movie_theater', 'hair_care', 'Travel', 'porn'],
+"food" : ['food','Food/Drink', 'coffee', 'Groceries', 'Restaurant', 'fast food', 'American Restaurant', 'Pizza Restaurant', 'Food and Beverage', 'Salads'],
+"transportation" : ['transportation','gas', 'gas_station', 'Transport'],
+"health" : ['health','electronics', 'hospital', 'health'],
+"shopping" : ['shopping','Clothes', 'Shopping', 'post_office', 'Utility Stores', 'loan', 'supermarket', 'furniture_store', 'School Supplies', 'home_goods_store', 'shoe_store']
 }
 translations = {}
 for key, value in backTranslations.items():
@@ -121,6 +122,62 @@ def makeWebhookResult(req):
             "fulfillmentText": str(speech),
         }
 
+    elif queryResult.get("action") == "occasion":
+        parameters = queryResult.get("parameters")
+
+        YOUR_API_KEY = 'AIzaSyBbzFWxQXttnJ3zYWB6sHUkoQIP9MpkEb0'
+        google_places = GooglePlaces(YOUR_API_KEY)
+
+        location = ""
+        for add in customerID['address']:
+            location = location + ", " + add
+
+        radius = 2000
+        types = types.TYPE_FOOD
+        queryRes = google_places.nearby_search(location, radius, types)
+
+
+
+        for place in queryRes:
+            place.get_details()
+            price = place.price_level
+            for review in place.reviews:
+                rating = review["rating"]
+                aspects = review["aspects"]
+
+        result = ""
+        if(parameters.get("love")!=NONE):
+            for place in queryRes:
+                place_temp = place.name
+                place.get_details()
+                price = place.price_level
+
+            for review in place.reviews:
+                rating = review["rating"]
+
+                if(int(price)>3 and int(rating)>4):
+                    result = place.temp
+
+                if result == "":
+                    result = place.temp
+        elif(parameters.get("family")!=NONE):
+            for place in queryRes:
+                place_temp = place.name
+                place.get_details()
+                price = place.price_level
+
+            for review in place.reviews:
+                rating = review["rating"]
+
+                if(int(price)<4 and int(rating)>3):
+                    result = place.temp
+                if result == "":
+                    result = place.temp
+        result = "You should consider the following place near you " + result
+        return {
+            "fulfillmentText": str(result),
+        }
+
 
 
 def graphByMerchant(customerID, merchantsJson, transfersJson):
@@ -172,6 +229,7 @@ def graphByMerchant(customerID, merchantsJson, transfersJson):
 
 
 
+
 def graphByCategory(customerID, merchantsJson, transfersJson, translations):
     idToCategory = {}
     for merchant in merchantsJson['results']:
@@ -193,58 +251,27 @@ def graphByCategory(customerID, merchantsJson, transfersJson, translations):
                             except:
                                 spending[translations[category]] += 0
 
-    if spending:
-        x = list()
-        y = list()
-        for key in spending:
-            x.append(key)
-            y.append(spending[key])
+    print(spending)
+    return jsonify({"data" : spending})
 
-        for i in range(len(x)):
-            x[i] = x[i].title()
 
-        trace = go.Bar(x = x, y=y)
-
-        data = [trace]
-        layout = go.Layout(
-            title='Categories of Largest Spending',
-            font=dict(family='Courier New, monospace', size=16, color='#1E8449'),
-            xaxis=dict(
-                title='Category',
-                titlefont=dict(
-                    family='Courier New, monospace',
-                    size=14,
-                    color='#7D3C98'
-                )
-            ),
-            yaxis=dict(
-                title='Spending (USD)',
-                titlefont=dict(
-                    family='Courier New, monospace',
-                    size=14,
-                    color='#7D3C98'
-                )
-            )
-        )
-        fig = go.Figure(data=data, layout=layout)
-
-        plotly.offline.plot(fig, filename=cwd+'/Graphs/GeneralCategories.html')
 
 #how much money saved
-def getPercentSaved(customerID, accountsJson, transfersJson):
+def getPercentSavings(customerID, accountsJson, transfersJson, depositsJson):
     spending = 0
-    revenue = -1
+    balance = -1
+    revenue = 0
     for transfer in transfersJson['results']:
         if transfer['payer_id'] == customerID:
             spending += transfer['amount']
+
     for deposits in depositsJson['results']:
         if deposits['payee_id'] == customerID:
-            if revenue<0:
-                revenue = 0
             revenue += deposits['amount']
-    if revenue == 0 or revenue ==-1:
+    print("Revenue", revenue)
+    if revenue == 0:
         return 0
-    return spending/revenue*100
+    return spending/revenue
 
 
 def getCashBack(customerID, accountsJson, transfersJson, depositsJson):
@@ -337,7 +364,6 @@ def getPercentChangeFromAverage(customerID, depositsJson, transfersJson, categor
 # brackets, You could spend less in.... (suggest)
 def findBestAlternatives(customerID, depositsJson, transfersJson, categories, translations, category, merchantsJson):
     idToName = {}
-    print(category)
     for merchant in merchantsJson['results']:
         if 'name' in merchant:
             idToName[merchant['_id']] = merchant['name'].title()
@@ -383,17 +409,16 @@ def findBestAlternatives(customerID, depositsJson, transfersJson, categories, tr
     return maxKey
 
 
-@app.route('/todo/api/v1.0/datavis/<int:data_id>', methods=['GET'])
+
+@app.route('/todo/api/v1.0/datavis/<string:data_id>', methods=['GET'])
 def get_data_id(data_id):
     data = [data for data in data_list if data['id'] == data_id]
 
     print(len(accountsJson))
     print(len(accountsJson['results']))
 
-    getPercentSaved(accountsJson['results'][data_id]['_id'], accountsJson, transfersJson)
-    graphByMerchant(accountsJson['results'][data_id]['_id'], merchantsJson, transfersJson)
 
-    return jsonify({'data_list': accountsJson['results'][data_id]})
+    return graphByCategory(data_id, merchantsJson, transfersJson, translations)
 
 
 if __name__ == '__main__':
