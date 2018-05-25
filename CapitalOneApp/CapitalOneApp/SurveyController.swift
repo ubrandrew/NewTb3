@@ -12,7 +12,7 @@ class SurveyController: UIViewController {
     
     let textView: UILabel = {
         let tv = UILabel()
-        tv.text = "If you save 20% on\nyour monthly\nincome, you'll get\n2% back."
+        tv.text = "If you save 20% on\nyour monthly\nincome, you'll get\n3% back."
         tv.numberOfLines = 0
         tv.textAlignment = .center
         tv.adjustsFontSizeToFitWidth = true
@@ -72,7 +72,10 @@ class SurveyController: UIViewController {
     }()
     
     @objc func handleSubmit(){
+        if incomeTextField.text != "" {
         let mainNavController = MainNavController()
+        
+        revenueTotal = incomeTextField.text!
         
         mainNavController.navigationItem.titleView = UIImageView(image: #imageLiteral(resourceName: "capitalonelogo"))
         navigationController?.setNavigationBarHidden(false, animated: false)
@@ -83,7 +86,7 @@ class SurveyController: UIViewController {
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
         
-        navigationController?.pushViewController(mainNavController, animated: true)
+            navigationController?.pushViewController(mainNavController, animated: true) }
     }
     
     

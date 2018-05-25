@@ -15,11 +15,11 @@ class BotController: UIViewController {
     let chipResponse: UILabel = {
         let chip = UILabel()
         chip.backgroundColor = .white
-        chip.text = "Ask me for some quality advice!"
+        chip.text = "Welcome to the OneBudget Bot! Ask me anything. Click the info button for help."
         chip.font = UIFont(name: "Avenir-Medium", size: 16)
         chip.numberOfLines = 0
         chip.textAlignment = .center
-        chip.layer.borderWidth = 0.5
+        chip.layer.borderWidth = 1
         chip.layer.cornerRadius = 10
         chip.layer.sublayerTransform = CATransform3DMakeTranslation(10, 0, 0)
         return chip
@@ -31,11 +31,10 @@ class BotController: UIViewController {
         tf.backgroundColor = .white
         tf.layer.borderColor = UIColor.black.cgColor
         tf.autocorrectionType = .no
-        tf.keyboardType = .emailAddress
+        tf.keyboardType = .numbersAndPunctuation
         tf.layer.borderWidth = 1
         tf.layer.cornerRadius = 10
         tf.layer.sublayerTransform = CATransform3DMakeTranslation(10, 0, 0)
-        tf.autocapitalizationType = .none
         tf.font = UIFont(name: "Avenir-Light", size: 16)
         return tf
     }()
@@ -97,6 +96,14 @@ class BotController: UIViewController {
     func setupNavBar(){
         self.navigationController?.navigationBar.tintColor = .black
         self.navigationController?.navigationBar.topItem?.title = " "
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "info").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleInfo))
+    }
+    
+    @objc func handleInfo(){
+        let adVC = HelpController()
+        
+        self.present(adVC, animated: true, completion: nil)
     }
 
     

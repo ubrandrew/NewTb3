@@ -1,19 +1,18 @@
 //
-//  AdviceController.swift
+//  HelpController.swift
 //  CapitalOneApp
 //
-//  Created by Niranjan Senthilkumar on 5/24/18.
+//  Created by Niranjan Senthilkumar on 5/25/18.
 //  Copyright © 2018 NJ. All rights reserved.
 //
 
 import UIKit
 
-
-class AdviceController: UIViewController {
+class HelpController: UIViewController {
     
     let textView: UILabel = {
         let tv = UILabel()
-        tv.text = "Goal:\nIf you save 20% on\nyour monthly\nincome, you'll get\n3% back."
+        tv.text = "Things to ask:\n\n1. I need help with my budget.\n2. How do I spend less on entertainment?\n\n(Categories are entertainment, shopping, food, health, transportaion.)"
         tv.numberOfLines = 0
         tv.textAlignment = .center
         tv.adjustsFontSizeToFitWidth = true
@@ -26,7 +25,7 @@ class AdviceController: UIViewController {
         let button = UIButton(type: .system)
         
         let attributedTitle = NSMutableAttributedString(string: "Dismiss", attributes: [NSAttributedStringKey.font: UIFont(name: "Avenir-Book", size: 18), NSAttributedStringKey.foregroundColor: UIColor.black])
-                
+        
         button.setAttributedTitle(attributedTitle, for: .normal)
         
         

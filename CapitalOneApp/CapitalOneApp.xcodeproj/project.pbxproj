@@ -21,6 +21,7 @@
 		8A847ECE20B78A2100EE9552 /* MainNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A847ECD20B78A2100EE9552 /* MainNavController.swift */; };
 		8A847ED020B791D800EE9552 /* AdviceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A847ECF20B791D800EE9552 /* AdviceController.swift */; };
 		8A847ED220B7CBFB00EE9552 /* BotController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A847ED120B7CBFB00EE9552 /* BotController.swift */; };
+		8A847ED420B823AF00EE9552 /* HelpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A847ED320B823AF00EE9552 /* HelpController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 		8A847ECD20B78A2100EE9552 /* MainNavController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavController.swift; sourceTree = "<group>"; };
 		8A847ECF20B791D800EE9552 /* AdviceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdviceController.swift; sourceTree = "<group>"; };
 		8A847ED120B7CBFB00EE9552 /* BotController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BotController.swift; sourceTree = "<group>"; };
+		8A847ED320B823AF00EE9552 /* HelpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpController.swift; sourceTree = "<group>"; };
 		EBF1B3D370A4556E182319C7 /* Pods-CapitalOneApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CapitalOneApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-CapitalOneApp/Pods-CapitalOneApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -93,6 +95,7 @@
 				8A847EC720B7355A00EE9552 /* MainCell.swift */,
 				8A847EC920B754B900EE9552 /* BarCell.swift */,
 				8A847ECF20B791D800EE9552 /* AdviceController.swift */,
+				8A847ED320B823AF00EE9552 /* HelpController.swift */,
 				8A847ECD20B78A2100EE9552 /* MainNavController.swift */,
 				8A847ECB20B7819800EE9552 /* MainHeader.swift */,
 				8A847EB520B716CB00EE9552 /* Main.storyboard */,
@@ -236,6 +239,7 @@
 				8A847ED020B791D800EE9552 /* AdviceController.swift in Sources */,
 				8A847ECC20B7819800EE9552 /* MainHeader.swift in Sources */,
 				8A847EB220B716CB00EE9552 /* AppDelegate.swift in Sources */,
+				8A847ED420B823AF00EE9552 /* HelpController.swift in Sources */,
 				8A847EC620B72AFD00EE9552 /* SurveyController.swift in Sources */,
 				8A847EC820B7355A00EE9552 /* MainCell.swift in Sources */,
 			);

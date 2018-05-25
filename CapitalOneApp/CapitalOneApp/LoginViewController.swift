@@ -30,7 +30,7 @@ class LoginViewController: UIViewController, UINavigationControllerDelegate {
         tf.layer.sublayerTransform = CATransform3DMakeTranslation(10, 0, 0)
         tf.autocapitalizationType = .none
         tf.font = UIFont(name: "Avenir-Light", size: 16)
-        tf.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
+       // tf.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
         
         return tf
     }()
@@ -48,18 +48,7 @@ class LoginViewController: UIViewController, UINavigationControllerDelegate {
         //tf.addTarget(self, action: #selector(handleTextInputChange), for: .editingChanged)
         return tf
     }()
-    
-    @objc func handleTextInputChange() {
-        let isFormValid = emailTextField.text?.characters.count ?? 0 > 0 &&  passwordTextField.text?.characters.count ?? 0 > 0
-        
-        if isFormValid {
-            loginButton.isEnabled = true
-            loginButton.backgroundColor = UIColor.rgb(red: 255, green: 51, blue: 102)
-        } else {
-            loginButton.isEnabled = false
-            loginButton.backgroundColor = UIColor.rgb(red: 255, green: 93, blue: 133)
-        }
-    }
+
 
     
     let loginButton: UIButton = {
@@ -83,7 +72,7 @@ class LoginViewController: UIViewController, UINavigationControllerDelegate {
         guard let emailText = emailTextField.text else { return }
         guard let passText = passwordTextField.text else { return }
         
-        if(emailText == "" && passText == ""){
+        if(emailText == "admin@gmail.com" && passText == "pass"){
             print("success")
             //let surveyController = DataViewController(collectionViewLayout: UICollectionViewFlowLayout())
             
