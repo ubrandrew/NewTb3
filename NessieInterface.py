@@ -350,18 +350,18 @@ def findBestAlternatives(customerID, depositsJson, transfersJson, categories, tr
 #             cats.add(merchant['category'])
 # print(cats)
 
-for i in range(len(accountsJson['results'])):
-    x = int(random.random()*len(accountsJson['results']))
-    print(x)
-    print(getPercentSaved(accountsJson['results'][x]['_id'], accountsJson, transfersJson))
-    print("Cash back", getCashBack(accountsJson['results'][x]['_id'], accountsJson, transfersJson, depositsJson))
-    if graphByMerchant(accountsJson['results'][x]['_id'], merchantsJson, transfersJson):
-        break
-# print("Percent saved",getPercentSaved("79c66be6a73e492741507b6b", accountsJson,transfersJson))
-# print("Cash back", getCashBack("79c66be6a73e492741507b6b", accountsJson,transfersJson, depositsJson))
-# graphByMerchant("79c66be6a73e492741507b6b", merchantsJson,transfersJson)
-# graphByCategory("79c66be6a73e492741507b6b", merchantsJson,transfersJson,translations)
-# print(getPercentChangeFromAverage("79c66be6a73e492741507b6b", depositsJson, transfersJson, categories, translations))
-# print(findBestAlternatives("79c66be6a73e492741507b6b", depositsJson, transfersJson, categories, translations, "health", merchantsJson))
+# for i in range(len(accountsJson['results'])):
+#     x = int(random.random()*len(accountsJson['results']))
+#     print(x)
+#     print(getPercentSaved(accountsJson['results'][x]['_id'], accountsJson, transfersJson))
+#     print("Cash back", getCashBack(accountsJson['results'][x]['_id'], accountsJson, transfersJson, depositsJson))
+#     if graphByMerchant(accountsJson['results'][x]['_id'], merchantsJson, transfersJson):
+#         break
+print("Percent saved",getPercentSaved("79c66be6a73e492741507b6b", accountsJson,transfersJson))
+print("Cash back", getCashBack("79c66be6a73e492741507b6b", accountsJson,transfersJson, depositsJson))
+graphByMerchant("79c66be6a73e492741507b6b", merchantsJson,transfersJson)
+graphByCategory("79c66be6a73e492741507b6b", merchantsJson,transfersJson,translations)
+print(getPercentChangeFromAverage("79c66be6a73e492741507b6b", depositsJson, transfersJson, categories, translations))
+print(findBestAlternatives("79c66be6a73e492741507b6b", depositsJson, transfersJson, categories, translations, "health", merchantsJson))
 
 #681 is solid
