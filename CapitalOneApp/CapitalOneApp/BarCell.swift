@@ -10,60 +10,41 @@ import ResearchKit
 
 class BarCell: UICollectionViewCell, ORKValueStackGraphChartViewDataSource{
     
-    
     let textView: UILabel = {
         let tv = UILabel()
-        tv.text = "Budget Breakdown"
+        tv.text = "Places Most Spent"
         tv.adjustsFontSizeToFitWidth = true
         tv.font = UIFont(name: "Avenir-Medium", size: 15)
-        tv.textColor = UIColor.rgb(red: 41, green: 77, blue: 106)
+        tv.textColor = .black
         return tv
     }()
     
     let entLabel: UILabel = {
         let tv = UILabel()
-        tv.text = "Entertainment"
+        tv.text = "Gamestop - $60"
         tv.adjustsFontSizeToFitWidth = true
         tv.font = UIFont(name: "Avenir-Medium", size: 10)
-        tv.textColor = UIColor.rgb(red: 0, green: 122, blue: 255)
+        tv.textColor = UIColor.rgb(red: 215, green: 25, blue: 28)
         return tv
     }()
     
     let transLabel: UILabel = {
         let tv = UILabel()
-        tv.text = "Transportation"
-        tv.adjustsFontSizeToFitWidth = true
+        tv.text = "Pharmacy - $90"
         tv.font = UIFont(name: "Avenir-Medium", size: 10)
-        tv.textColor = UIColor.rgb(red: 51, green: 148, blue: 255)
+        tv.textColor = UIColor.rgb(red: 253, green: 174, blue: 97)
         return tv
     }()
     
     let foodLabel: UILabel = {
         let tv = UILabel()
-        tv.text = "Food"
+        tv.text = "Trader Joes - $150"
         tv.adjustsFontSizeToFitWidth = true
         tv.font = UIFont(name: "Avenir-Medium", size: 10)
-        tv.textColor = UIColor.rgb(red: 102, green: 175, blue: 255)
+        tv.textColor = UIColor.rgb(red: 77, green: 175, blue: 74)
         return tv
     }()
-    
-    let helLabel: UILabel = {
-        let tv = UILabel()
-        tv.text = "Health"
-        tv.adjustsFontSizeToFitWidth = true
-        tv.font = UIFont(name: "Avenir-Medium", size: 10)
-        tv.textColor = UIColor.rgb(red: 153, green: 202, blue: 255)
-        return tv
-    }()
-    
-    let shopLabel: UILabel = {
-        let tv = UILabel()
-        tv.text = "Shopping"
-        tv.adjustsFontSizeToFitWidth = true
-        tv.font = UIFont(name: "Avenir-Medium", size: 10)
-        tv.textColor = UIColor.rgb(red: 204, green: 228, blue: 255)
-        return tv
-    }()
+
     
     let entImage: UIImageView = {
         let image = UIImageView()
@@ -73,65 +54,53 @@ class BarCell: UICollectionViewCell, ORKValueStackGraphChartViewDataSource{
     
     let transImage: UIImageView = {
         let image = UIImageView()
-        image.image = #imageLiteral(resourceName: "transimage")
+        image.image = #imageLiteral(resourceName: "transImage")
         return image
     }()
     
     let foodImage: UIImageView = {
         let image = UIImageView()
-        image.image = #imageLiteral(resourceName: "foodimage")
+        image.image = #imageLiteral(resourceName: "foodImage")
         return image
     }()
-    
-    let helImage: UIImageView = {
-        let image = UIImageView()
-        image.image = #imageLiteral(resourceName: "helimage")
-        return image
-    }()
-    
-    let shopImage: UIImageView = {
-        let image = UIImageView()
-        image.image = #imageLiteral(resourceName: "shopimage")
-        return image
-    }()
-    
+
     var plotPoints =
         [
             [
-                ORKValueStack(stackedValues: [4])
+                ORKValueStack(stackedValues: [60])
             ],
             [
-                ORKValueStack(stackedValues: [10])
+                ORKValueStack(stackedValues: [60])
             ],
             [
-                ORKValueStack(stackedValues: [5])
+                ORKValueStack(stackedValues: [60])
             ],
             [
-                ORKValueStack(stackedValues: [4])
+                ORKValueStack(stackedValues: [60])
             ],
             [
-                ORKValueStack(stackedValues: [10])
+                ORKValueStack(stackedValues: [90])
             ],
             [
-                ORKValueStack(stackedValues: [5])
+                ORKValueStack(stackedValues: [90])
             ],
             [
-                ORKValueStack(stackedValues: [4])
+                ORKValueStack(stackedValues: [90])
             ],
             [
-                ORKValueStack(stackedValues: [10])
+                ORKValueStack(stackedValues: [90])
             ],
             [
-                ORKValueStack(stackedValues: [5])
+                ORKValueStack(stackedValues: [150])
             ],
             [
-                ORKValueStack(stackedValues: [4])
+                ORKValueStack(stackedValues: [150])
             ],
             [
-                ORKValueStack(stackedValues: [10])
+                ORKValueStack(stackedValues: [150])
             ],
             [
-                ORKValueStack(stackedValues: [5])
+                ORKValueStack(stackedValues: [150])
             ]
     ]
     
@@ -150,22 +119,31 @@ class BarCell: UICollectionViewCell, ORKValueStackGraphChartViewDataSource{
     func graphChartView(_ graphChartView: ORKGraphChartView, colorForPlotIndex plotIndex: Int) -> UIColor {
         switch plotIndex {
         case 0:
-            return .blue
+            return UIColor.rgb(red: 215, green: 25, blue: 28)
         case 1:
-            return .red
+            return UIColor.rgb(red: 215, green: 25, blue: 28)
         case 2:
-            return .green
+            return UIColor.rgb(red: 215, green: 25, blue: 28)
         case 3:
-            return .black
+            return UIColor.rgb(red: 215, green: 25, blue: 28)
         case 4:
-            return .purple
+            return UIColor.rgb(red: 253, green: 174, blue: 97)
         case 5:
-            return .yellow
+            return UIColor.rgb(red: 253, green: 174, blue: 97)
         case 6:
-            return .gray
+            return UIColor.rgb(red: 253, green: 174, blue: 97)
+        case 7:
+            return UIColor.rgb(red: 253, green: 174, blue: 97)
+        case 8:
+            return UIColor.rgb(red: 77, green: 175, blue: 74)
+        case 9:
+            return UIColor.rgb(red: 77, green: 175, blue: 74)
+        case 10:
+            return UIColor.rgb(red: 77, green: 175, blue: 74)
+        case 11:
+            return UIColor.rgb(red: 77, green: 175, blue: 74)
         default:
-            return .blue
-
+            return .white
         }
         
     }
@@ -173,7 +151,7 @@ class BarCell: UICollectionViewCell, ORKValueStackGraphChartViewDataSource{
     func graphChartView(_ graphChartView: ORKGraphChartView, titleForXAxisAtPointIndex pointIndex: Int) -> String? {
             switch pointIndex {
             default:
-                return "Categories in Budget Breakdown"
+                return " Categories "
         }
         
     }
@@ -196,7 +174,6 @@ class BarCell: UICollectionViewCell, ORKValueStackGraphChartViewDataSource{
         graphChartView.showsVerticalReferenceLines = true
         graphChartView.axisColor = .white
         graphChartView.verticalAxisTitleColor = .orange
-        graphChartView.showsHorizontalReferenceLines = true
         graphChartView.showsVerticalReferenceLines = true
         graphChartView.scrubberLineColor = .red
         
@@ -214,21 +191,23 @@ class BarCell: UICollectionViewCell, ORKValueStackGraphChartViewDataSource{
     }
     
     func setupColors(){
-        let stackView = UIStackView(arrangedSubviews: [entImage, transImage, foodImage, helImage, shopImage])
+        let stackView = UIStackView(arrangedSubviews: [entImage, transImage, foodImage])
         stackView.distribution = .fillEqually
         stackView.axis = .vertical
-        stackView.spacing = 13
+        stackView.spacing = 17
         addSubview(stackView)
         
-        stackView.anchor(top: textView.bottomAnchor, left: textView.leftAnchor, bottom: nil, right: textView.rightAnchor, paddingTop: -10, paddingLeft: 5, paddingBottom: 0, paddingRight: 119, width: 15, height: 125)
+        stackView.anchor(top: textView.bottomAnchor, left: nil, bottom: nil, right: textView.rightAnchor, paddingTop: -8, paddingLeft: 0, paddingBottom: 0, paddingRight: 15, width: 15, height: 70)
         
-        let newStack = UIStackView(arrangedSubviews: [entLabel, transLabel, foodLabel, helLabel, shopLabel])
+        let newStack = UIStackView(arrangedSubviews: [entLabel, transLabel, foodLabel])
         newStack.distribution = .fillEqually
         newStack.axis = .vertical
-        newStack.spacing = 14
+        newStack.alignment = .trailing
+        newStack.spacing = 16
         addSubview(newStack)
         
-        newStack.anchor(top: textView.bottomAnchor, left: stackView.rightAnchor, bottom: nil, right: textView.rightAnchor, paddingTop: -9, paddingLeft: 5, paddingBottom: 0, paddingRight: 50, width: 62, height: 124)
+        newStack.anchor(top: textView.bottomAnchor, left: nil, bottom: nil, right: stackView.leftAnchor, paddingTop: -9, paddingLeft: 0, paddingBottom: 0, paddingRight: 5, width: 72, height: 69)
+
     }
 
     

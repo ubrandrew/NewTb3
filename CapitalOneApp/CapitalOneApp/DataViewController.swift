@@ -9,6 +9,12 @@
 import UIKit
 import ResearchKit
 
+struct Shop: Decodable {
+    let entertainment: Int?
+    let health: Int?
+    let shopping: Int?
+}
+
 class DataViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
     let cellId = "cellId"
@@ -19,7 +25,7 @@ class DataViewController: UICollectionViewController, UICollectionViewDelegateFl
 
     var userId: String?
     
-    let cells = ["pie","bar","pie","bar","pie"]
+    let cells = ["pie","bar"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,11 +55,11 @@ class DataViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        return UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 10
+        return 20
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -99,10 +105,47 @@ class DataViewController: UICollectionViewController, UICollectionViewDelegateFl
         
     }
     
+    @objc func handleRequest(){
+        
+        let jsonUrlString = "https://dd31a343.ngrok.io/todo/api/v1.0/datavis/category/79c66be6a73e492741507b6b"
+        guard let url = URL(string: jsonUrlString) else { return }
+        
+        URLSession.shared.dataTask(with: url) { (data, response, err) in
+            //perhaps check err
+            //also perhaps check response status 200 OK
+            
+            guard let data = data else { return }
+            
+            //            let dataAsString = String(data: data, encoding: .utf8)
+            //            print(dataAsString)
+            
+            do {
+                //                let websiteDescription = try JSONDecoder().decode(WebsiteDescription.self, from: data)
+                //                print(websiteDescription.name, websiteDescription.description)
+                
+                let courses = try JSONDecoder().decode([Shop].self, from: data)
+                print(courses)
+                
+                //Swift 2/3/ObjC
+                //                guard let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] else { return }
+                //
+                //                let course = Course(json: json)
+                //                print(course.name)
+                
+            } catch let jsonErr {
+                print("Error serializing json:", jsonErr)
+            }
+            
+            
+            }.resume()
+    }
+    
+    
     @objc func handleInfo(){
         let adVC = AdviceController()
-        
+
         self.present(adVC, animated: true, completion: nil)
+
     }
     
     

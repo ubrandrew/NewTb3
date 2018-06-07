@@ -12,7 +12,7 @@ class MainNavController: UIViewController {
     
     let dataButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Data Visuals", for: .normal)
+        button.setTitle("Budget Analysis", for: .normal)
         button.backgroundColor = UIColor.rgb(red: 0, green: 71, blue: 123)
         
         button.layer.cornerRadius = 10

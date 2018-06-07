@@ -9,12 +9,25 @@
 import UIKit
 import TCProgressBar
 
+var revenueTotal = String()
+
 class MainHeader: UICollectionViewCell {
     
     let progressBar = TCProgressBar(frame: CGRect(x: 0,
                                                   y: 0,
                                                   width: 200,
                                                   height: 20))
+    
+    let textView: UILabel = {
+        let tv = UILabel()
+        tv.text = "Progress towards reward"
+        tv.numberOfLines = 0
+        tv.textAlignment = .center
+        tv.adjustsFontSizeToFitWidth = true
+        tv.font = UIFont(name: "Avenir-Medium", size: 24)
+        return tv
+    }()
+
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,8 +44,34 @@ class MainHeader: UICollectionViewCell {
         progressBar.backgroundColor = .white
         progressBar.value = 0.2
         
+        addSubview(textView)
+        textView.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 5, paddingLeft: 35, paddingBottom: 45, paddingRight: 35, width: 0, height: 0)
+        
         addSubview(progressBar)
-        progressBar.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 20, paddingLeft: 20, paddingBottom: 20, paddingRight: 20, width: 0, height: 0)
+        progressBar.anchor(top: textView.bottomAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 10, paddingLeft: 20, paddingBottom: 10, paddingRight: 20, width: 0, height: 0)
+        
+        var spendingTotal:Int = 300
+        var revTotal:Decimal = 0
+        
+        print(revenueTotal)
+        print(123)
+        
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        
+        if let number = formatter.number(from: revenueTotal) {
+            let amount = number.decimalValue
+            revTotal = amount
+        }
+        
+        var percentage: Double = Double(spendingTotal)/Double(revTotal as NSNumber)
+        
+        if percentage > 1.0 {
+            progressBar.value = 1
+        }
+        else{
+            progressBar.value = CGFloat(percentage)
+        }
     }
     
     

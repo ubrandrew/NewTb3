@@ -15,7 +15,7 @@ class MainCell: UICollectionViewCell, ORKPieChartViewDataSource {
         tv.text = "Budget Breakdown"
         tv.adjustsFontSizeToFitWidth = true
         tv.font = UIFont(name: "Avenir-Medium", size: 15)
-        tv.textColor = UIColor.rgb(red: 41, green: 77, blue: 106)
+        tv.textColor = .black
         return tv
     }()
     
@@ -24,7 +24,7 @@ class MainCell: UICollectionViewCell, ORKPieChartViewDataSource {
         tv.text = "Entertainment"
         tv.adjustsFontSizeToFitWidth = true
         tv.font = UIFont(name: "Avenir-Medium", size: 10)
-        tv.textColor = UIColor.rgb(red: 0, green: 122, blue: 255)
+        tv.textColor = UIColor.rgb(red: 215, green: 25, blue: 28)
         return tv
     }()
     
@@ -33,7 +33,7 @@ class MainCell: UICollectionViewCell, ORKPieChartViewDataSource {
         tv.text = "Transportation"
         tv.adjustsFontSizeToFitWidth = true
         tv.font = UIFont(name: "Avenir-Medium", size: 10)
-        tv.textColor = UIColor.rgb(red: 51, green: 148, blue: 255)
+        tv.textColor = UIColor.rgb(red: 253, green: 174, blue: 97)
         return tv
     }()
     
@@ -42,7 +42,7 @@ class MainCell: UICollectionViewCell, ORKPieChartViewDataSource {
         tv.text = "Food"
         tv.adjustsFontSizeToFitWidth = true
         tv.font = UIFont(name: "Avenir-Medium", size: 10)
-        tv.textColor = UIColor.rgb(red: 102, green: 175, blue: 255)
+        tv.textColor = UIColor.rgb(red: 77, green: 175, blue: 74)
         return tv
     }()
     
@@ -51,7 +51,7 @@ class MainCell: UICollectionViewCell, ORKPieChartViewDataSource {
         tv.text = "Health"
         tv.adjustsFontSizeToFitWidth = true
         tv.font = UIFont(name: "Avenir-Medium", size: 10)
-        tv.textColor = UIColor.rgb(red: 153, green: 202, blue: 255)
+        tv.textColor = UIColor.rgb(red: 94, green: 62, blue: 33)
         return tv
     }()
     
@@ -60,7 +60,7 @@ class MainCell: UICollectionViewCell, ORKPieChartViewDataSource {
         tv.text = "Shopping"
         tv.adjustsFontSizeToFitWidth = true
         tv.font = UIFont(name: "Avenir-Medium", size: 10)
-        tv.textColor = UIColor.rgb(red: 204, green: 228, blue: 255)
+        tv.textColor = UIColor.rgb(red: 43, green: 131, blue: 186)
         return tv
     }()
     
@@ -72,25 +72,25 @@ class MainCell: UICollectionViewCell, ORKPieChartViewDataSource {
     
     let transImage: UIImageView = {
         let image = UIImageView()
-        image.image = #imageLiteral(resourceName: "transimage")
+        image.image = #imageLiteral(resourceName: "transImage")
         return image
     }()
     
     let foodImage: UIImageView = {
         let image = UIImageView()
-        image.image = #imageLiteral(resourceName: "foodimage")
+        image.image = #imageLiteral(resourceName: "foodImage")
         return image
     }()
     
     let helImage: UIImageView = {
         let image = UIImageView()
-        image.image = #imageLiteral(resourceName: "helimage")
+        image.image = #imageLiteral(resourceName: "helImage")
         return image
     }()
     
     let shopImage: UIImageView = {
         let image = UIImageView()
-        image.image = #imageLiteral(resourceName: "shopimage")
+        image.image = #imageLiteral(resourceName: "shopImage")
         return image
     }()
     
@@ -106,53 +106,34 @@ class MainCell: UICollectionViewCell, ORKPieChartViewDataSource {
     func pieChartView(_ pieChartView: ORKPieChartView, valueForSegmentAt index: Int) -> CGFloat {
         switch PieChartSegment(rawValue: index)! {
         case .Entertainment:
-            return 30
-        case .Transportation:
             return 20
+        case .Transportation:
+            return 0
         case .Food:
-            return 10
+            return 0
         case .Health:
             return 30
         case .Shopping:
-            return 10
+            return 50
         }
     }
 
     func pieChartView(
-        pieChartView: ORKPieChartView,
-        colorForSegmentAtIndex index: Int) -> UIColor {
+        _ pieChartView: ORKPieChartView,
+        colorForSegmentAt index: Int) -> UIColor {
 
         switch PieChartSegment(rawValue: index)! {
         case .Entertainment:
-            return .orange
+            return UIColor.rgb(red: 215, green: 25, blue: 28)
         case .Transportation:
-            return .lightGray
+            return UIColor.rgb(red: 253, green: 174, blue: 97)
         case .Food:
-            return .blue
+            return UIColor.rgb(red: 77, green: 175, blue: 74)
         case .Health:
-            return .black
+            return UIColor.rgb(red: 94, green: 62, blue: 33)
         case .Shopping:
-            return .green
+            return UIColor.rgb(red: 43, green: 131, blue: 186)
         }
-    }
-
-    func pieChartView(
-        pieChartView: ORKPieChartView,
-        titleForSegmentAtIndex index: Int) -> String {
-
-        switch PieChartSegment(rawValue: index)! {
-        case .Entertainment:
-            return NSLocalizedString("Entertainment", comment: "")
-        case .Transportation:
-            return NSLocalizedString("Transportation", comment: "")
-        case .Food:
-            return NSLocalizedString("Food", comment: "")
-        case .Health:
-            return NSLocalizedString("Health", comment: "")
-        case .Shopping:
-            return NSLocalizedString("Shopping", comment: "")
-        }
-
     }
     
     let graphChartView: ORKBarGraphChartView = {
@@ -178,7 +159,7 @@ class MainCell: UICollectionViewCell, ORKPieChartViewDataSource {
 //        pieChartView.showsTitleAboveChart = true
 
         addSubview(pieChartView)
-        pieChartView.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: nil, paddingTop: 11, paddingLeft: 19, paddingBottom: 11, paddingRight: 0, width: 177, height: 0)
+        pieChartView.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: nil, paddingTop: 11, paddingLeft: 35, paddingBottom: 11, paddingRight: 0, width: 177, height: 0)
         
         pieChartView.lineWidth = 20
         
@@ -200,15 +181,16 @@ class MainCell: UICollectionViewCell, ORKPieChartViewDataSource {
         stackView.spacing = 13
         addSubview(stackView)
         
-        stackView.anchor(top: textView.bottomAnchor, left: textView.leftAnchor, bottom: nil, right: textView.rightAnchor, paddingTop: -10, paddingLeft: 5, paddingBottom: 0, paddingRight: 119, width: 15, height: 125)
+        stackView.anchor(top: textView.bottomAnchor, left: nil, bottom: nil, right: textView.rightAnchor, paddingTop: -10, paddingLeft: 0, paddingBottom: 0, paddingRight: 15, width: 15, height: 125)
         
         let newStack = UIStackView(arrangedSubviews: [entLabel, transLabel, foodLabel, helLabel, shopLabel])
         newStack.distribution = .fillEqually
         newStack.axis = .vertical
+        newStack.alignment = .trailing
         newStack.spacing = 14
         addSubview(newStack)
         
-        newStack.anchor(top: textView.bottomAnchor, left: stackView.rightAnchor, bottom: nil, right: textView.rightAnchor, paddingTop: -9, paddingLeft: 5, paddingBottom: 0, paddingRight: 50, width: 62, height: 124)
+        newStack.anchor(top: textView.bottomAnchor, left: nil, bottom: nil, right: stackView.leftAnchor, paddingTop: -9, paddingLeft: 0, paddingBottom: 0, paddingRight: 5, width: 62, height: 124)
     }
     
     func setupChannelCell(){
